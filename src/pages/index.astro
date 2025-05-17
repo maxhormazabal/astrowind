@@ -1,438 +1,306 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Content from '~/components/widgets/Content.astro';
-import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
 const metadata = {
-  title: 'Droip — No-Code WordPress Site Builder',
+  title: 'Dokken — Intelligent Document Processing Platform',
   ignoreTitleTemplate: true,
 };
 ---
 
 <Layout metadata={metadata}>
   <!-- Hero Widget ******************* -->
-  <div class="mt-10 px-4 sm:px-6">
-    <div class="max-w-7xl mx-auto">
-      <div class="py-12 md:py-20">
-        <!-- Purple Box with No-Code WordPress Site Builder -->
-        <div class="inline-block rounded-full bg-purple-100 px-6 py-2 mb-8">
-          <p class="text-base text-purple-800 font-semibold">No-Code WordPress Site Builder</p>
-        </div>
-
+  <div class="bg-blue-600 min-h-screen pt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="py-12 md:py-20 text-center">
         <!-- Main Heading -->
-        <div class="text-left pb-10 md:pb-16">
-          <h1 class="text-5xl md:text-6xl xl:text-7xl font-bold leading-tight tracking-tight mb-8">
-            <span class="block">Break Limits.</span>
-            <span class="block">Build <span class="text-purple-600">Anything.</span></span>
-            <span class="block">No Code Needed.</span>
+        <div class="pb-10 md:pb-16 max-w-4xl mx-auto">
+          <h1 class="text-5xl md:text-6xl xl:text-7xl font-bold leading-tight tracking-tight mb-8 text-white">
+            <span class="block">Efficient Docs,</span>
+            <span class="block">Not Paperwork</span>
           </h1>
 
-          <!-- Info Box -->
-          <div class="max-w-lg bg-blue-50 rounded-lg p-6 mb-8">
-            <p class="text-lg text-blue-800">
-              Droip is a no-code, drag-and-drop WordPress builder that simplifies website creation with powerful
-              capabilities.
+          <div class="text-center max-w-3xl mx-auto">
+            <p class="text-xl text-white mb-6">
+              Transform your document processing with <span class="font-semibold">AI-powered extraction</span>,
+              <span class="font-semibold">automated validation</span>, and
+              <span class="font-semibold">custom workflows</span>.
             </p>
-          </div>
+            <p class="text-lg text-blue-100 mb-12">
+              Perfect for businesses processing more than 1,000 documents monthly.
+            </p>
 
-          <!-- Buttons -->
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#"
-              class="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-full"
-            >
-              Get started with Droip
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fill-rule="evenodd"
-                  d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </a>
-            <a
-              href="#"
-              class="inline-flex items-center justify-center text-gray-700 border border-gray-300 font-medium py-3 px-6 rounded-full"
-            >
-              Watch Intro
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 ml-2 text-purple-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#"
+                class="inline-flex items-center justify-center bg-white hover:bg-gray-100 text-blue-600 font-medium py-3 px-8 rounded-full"
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </a>
+                Book A Demo
+              </a>
+              <a
+                href="#"
+                class="inline-flex items-center justify-center border border-white hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full"
+              >
+                Learn More
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Image Section -->
-    <div class="max-w-7xl mx-auto mt-8">
-      <div class="relative rounded-xl overflow-hidden shadow-xl">
-        <img
-          src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
-          alt="Droip Website Builder Interface"
-          class="w-full h-auto"
-        />
+      <!-- Before/After Demo Section -->
+      <div class="max-w-5xl mx-auto mt-8 pb-20">
+        <div class="relative bg-white rounded-xl overflow-hidden shadow-xl p-8">
+          <div class="flex flex-col md:flex-row justify-between">
+            <div class="w-full md:w-1/2 p-4 border-r border-gray-200">
+              <div class="flex items-center mb-4">
+                <div class="h-6 w-6 rounded-full border border-gray-300 flex items-center justify-center mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 text-gray-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <span class="text-gray-600 font-medium">Manual Processing</span>
+              </div>
+              <div class="text-gray-400 mt-6">
+                <p class="mb-3">• Hours spent manually extracting data</p>
+                <p class="mb-3">• High error rates (15-20%)</p>
+                <p class="mb-3">• Complex validation workflows</p>
+                <p class="mb-3">• Multiple people involved in approvals</p>
+                <p class="mb-3">• Average processing time: 15 min/doc</p>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-4">
+              <div class="flex items-center mb-4">
+                <div
+                  class="h-6 w-6 rounded-full border border-blue-500 bg-blue-500 flex items-center justify-center mr-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <span class="text-blue-600 font-medium">Dokken IDP</span>
+              </div>
+              <div class="text-gray-800 mt-6">
+                <p class="mb-3">• Automated data extraction with 99% accuracy</p>
+                <p class="mb-3">• Error reduction to less than 2%</p>
+                <p class="mb-3">• Automated business rule validation</p>
+                <p class="mb-3">• Streamlined approval workflows</p>
+                <p class="mb-3">• Average processing time: 30 sec/doc</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Features Widget *************** -->
-
   <Features
     id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023 and 2024."
+    tagline="Our Platform"
+    title="End-to-End Intelligent Document Processing"
+    subtitle="Automate the entire document lifecycle, from capture to validation and storage, reducing errors and saving time."
     items={[
       {
-        title: 'Astro + Tailwind CSS Integration',
+        title: 'Intelligent Extraction',
         description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility.',
-        icon: 'tabler:brand-tailwind',
+          'Advanced OCR and NLP technology to capture text and structured fields from invoices, contracts, reports, and more.',
+        icon: 'tabler:brain',
       },
       {
-        title: 'Ready-to-use Components',
+        title: 'Business Rules Validation',
         description:
-          'Widgets made with Tailwind CSS ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
-      },
-      {
-        title: 'Best Practices',
-        description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
-      },
-      {
-        title: 'Excellent Page Speed',
-        description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
-        icon: 'tabler:rocket',
-      },
-      {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          'SEO lies in its ability to enhance a website visibility, driving organic traffic and enabling it to reach a wider audience.',
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
-      },
-    ]}
-  />
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
-    items={[
-      {
-        title: 'Built on top of Astro 5.0',
-        description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
-      },
-      {
-        title: 'Styled using Tailwind CSS',
-        description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
-      },
-      {
-        title: 'Cross-browser compatibility',
-        description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description:
-          'Tailor the template effortlessly to match your brand identity and requirements, making your website distinct and saving you time.',
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          'Ensure your website optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.',
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Steps Widget ****************** -->
-
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          'Kickstart with GitHub! Either fork the AstroWind template or simply click Use this template. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you have already set the foundation.',
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
-        description:
-          'Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it is the content that tells your story, so make it captivating.',
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
+          'Configurable engine that verifies duplicates, ranges, field consistency, and internal policies automatically.',
         icon: 'tabler:check',
       },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS"
-    tagline="Components"
-    items={[
       {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
+        title: 'Data Integration',
         description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
+          'Seamless connection with internal databases, ERPs and CRMs to enrich and complete missing information.',
+        icon: 'tabler:database',
       },
       {
-        title: 'Features',
+        title: 'Custom Workflows',
         description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
+          'Automatic flow of notifications, approvals, alerts, and routing to downstream systems based on your needs.',
+        icon: 'tabler:route',
       },
       {
-        title: 'Content',
+        title: 'Deployment Options',
         description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
+          'Choose between Hybrid setup for large enterprises or lightweight SaaS for quick onboarding and SMEs.',
+        icon: 'tabler:cloud',
       },
       {
-        title: 'Call-to-Action',
+        title: 'Security & Compliance',
         description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
-
-  <!-- HighlightedPosts Widget ******* -->
-
-  <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-                      Each new article will be an important step that you will need to know to be an expert in creating a website using Astro + Tailwind CSS.
-                      Astro is a very interesting technology. Thanks.
-              `}
-  />
-
-  <!-- FAQs Widget ******************* -->
-
-  <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
-    tagline="FAQs"
-    classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: 'Why AstroWind?',
-        description:
-          'Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He is a demon on wheels.',
-      },
-      {
-        title: 'What do I need to start?',
-        description:
-          'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it is actually our duty to future generations.',
-      },
-      {
-        title: 'How to install the Astro + Tailwind CSS template?',
-        description:
-          'Well, the way they make shows is, they make one show. That show is called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they are going to make more shows.',
-      },
-      {
-        title: "What's something that you don't understand?",
-        description:
-          'A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I did not even know we were calling him Big Bear.',
-      },
-      {
-        title: 'What is something that you would like to try again?',
-        description:
-          'A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly do not know who you are talking to, so let me clue you in.',
-      },
-      {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
-        description:
-          'This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that is certainly good to know. About four years. I got tired of hearing how young I looked.',
+          'Enterprise-grade security with encryption, access controls, and audit trails to keep your documents safe.',
+        icon: 'tabler:lock',
       },
     ]}
   />
 
-  <!-- Stats Widget ****************** -->
+  <!-- Why Dokken Section -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Why Choose Dokken?</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our platform stands out from competitors with key differentiators that deliver real business impact.
+        </p>
+      </div>
 
-  <Stats
-    stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
-    ]}
-  />
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <div class="flex items-start mb-4">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">True End-to-End Solution</h3>
+              <p class="text-gray-600">
+                We don't just extract data; we handle the complete document journey through validation, enrichment, and
+                integration with your systems.
+              </p>
+            </div>
+          </div>
+        </div>
 
-  <!-- CallToAction Widget *********** -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <div class="flex items-start mb-4">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">Native Business Rules Validation</h3>
+              <p class="text-gray-600">
+                Configure complex validation rules without additional development, ensuring data integrity from day one.
+              </p>
+            </div>
+          </div>
+        </div>
 
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/onwidget/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
-    </Fragment>
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <div class="flex items-start mb-4">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">System Integration</h3>
+              <p class="text-gray-600">
+                Automatic connection with your internal systems completes and verifies data without manual intervention.
+              </p>
+            </div>
+          </div>
+        </div>
 
-    <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
-    </Fragment>
-  </CallToAction>
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <div class="flex items-start mb-4">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">Scientific-Tech Team</h3>
+              <p class="text-gray-600">
+                Our own R&D team continuously improves our AI models, ensuring you always have cutting-edge technology.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-blue-600 py-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Transform Your Document Processing?</h2>
+      <p class="text-xl text-blue-100 mb-10 max-w-3xl mx-auto">
+        Join the companies that save over 30 hours per week and reduce document processing costs by up to 70%.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="#"
+          class="inline-flex items-center justify-center bg-white hover:bg-gray-100 text-blue-600 font-medium py-3 px-8 rounded-full"
+        >
+          Schedule a Demo
+        </a>
+        <a
+          href="#"
+          class="inline-flex items-center justify-center border border-white hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full"
+        >
+          Contact Sales
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .font-handwriting {
+    font-family: 'Segoe Script', 'Brush Script MT', cursive;
+  }
+</style>
