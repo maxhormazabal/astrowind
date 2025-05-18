@@ -36,12 +36,14 @@ const {
                       </span>
                     </div>
                   )}
-                  <div class="px-2 py-0">
+                  <div class="px-2 py-0 flex flex-col flex-1">
                     {title && (
                       <h3 class="text-center text-xl font-semibold uppercase leading-6 tracking-wider mb-2">{title}</h3>
                     )}
-                    {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
-                    <div class="my-8">
+                    <div class="subtitle-container">
+                      {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
+                    </div>
+                    <div class="my-8 flex-grow-0">
                       <div class="flex items-center justify-center text-center mb-1">
                         {price !== '' && (
                           <>
@@ -53,9 +55,9 @@ const {
                       <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
                     </div>
                     {items && (
-                      <div>
+                      <div class="flex-grow">
                         <ul
-                          class="my-8 md:my-10 space-y-2 text-left"
+                          class="my-8 md:my-10 space-y-2 text-left pricing-items"
                           id={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
                         >
                           {items.map(
@@ -80,6 +82,7 @@ const {
                             class="toggle-items text-sm font-medium text-primary flex items-center mx-auto"
                             data-target={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
                             data-expanded="false"
+                            type="button"
                           >
                             <span class="toggle-text">Ver más</span>
                             <Icon name="tabler:chevron-down" class="toggle-icon w-5 h-5 transition-transform" />
@@ -117,41 +120,97 @@ const {
   .rotate-180 {
     transform: rotate(180deg);
   }
+
+  /* Ajustamos alturas mínimas para garantizar alineación */
+  .pricing-items {
+    min-height: 12rem; /* Altura mínima para desktop */
+  }
+
+  @media (max-width: 768px) {
+    .pricing-items {
+      min-height: auto; /* En móvil permitimos altura natural */
+    }
+  }
+
+  /* Altura fija para subtítulos en todos los planes */
+  .subtitle-container {
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
-<script>
-  // Script para expandir/colapsar los elementos
-  function setupToggleItems() {
-    document.querySelectorAll('.toggle-items').forEach((button) => {
-      button.addEventListener('click', () => {
-        const targetId = button.getAttribute('data-target');
-        const isExpanded = button.getAttribute('data-expanded') === 'true';
-        const newState = !isExpanded;
+<script is:inline define:vars={{ visibleItems }}>
+  // Script para expandir/colapsar los elementos usando delegación de eventos
+  function handleToggleClick(event) {
+    // Verificar si el click fue en un botón toggle o sus hijos
+    const button = event.target.closest('.toggle-items');
+    if (!button) return;
 
-        // Actualizar todos los botones y listas al mismo estado
-        document.querySelectorAll('.toggle-items').forEach((btn) => {
-          btn.setAttribute('data-expanded', newState.toString());
-          const text = btn.querySelector('.toggle-text');
-          const icon = btn.querySelector('.toggle-icon');
+    event.preventDefault();
 
-          if (text) text.textContent = newState ? 'Ver menos' : 'Ver más';
-          if (icon) {
-            // Usar classList en lugar de style para mayor compatibilidad
-            icon.classList.toggle('rotate-180', newState);
-          }
-        });
+    const isExpanded = button.getAttribute('data-expanded') === 'true';
+    const newState = !isExpanded;
 
-        // Mostrar/ocultar todos los elementos ocultos en todas las listas
-        document.querySelectorAll('.item-hidden').forEach((item) => {
-          item.classList.toggle('hidden', !newState);
-        });
-      });
+    // Actualizar todos los botones y listas al mismo estado
+    document.querySelectorAll('.toggle-items').forEach((btn) => {
+      btn.setAttribute('data-expanded', newState.toString());
+      const text = btn.querySelector('.toggle-text');
+      const icon = btn.querySelector('.toggle-icon');
+
+      if (text) text.textContent = newState ? 'Ver menos' : 'Ver más';
+      if (icon) {
+        if (newState) {
+          icon.classList.add('rotate-180');
+        } else {
+          icon.classList.remove('rotate-180');
+        }
+      }
+    });
+
+    // Mostrar/ocultar todos los elementos ocultos en todas las listas
+    document.querySelectorAll('.item-hidden').forEach((item) => {
+      if (newState) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
     });
   }
 
-  // Ejecutar después de que el DOM esté cargado
-  document.addEventListener('DOMContentLoaded', setupToggleItems);
+  // Función para configurar la delegación de eventos
+  function setupPricingToggles() {
+    // Limpiar eventos anteriores para evitar duplicados
+    document.body.removeEventListener('click', handleToggleClick);
 
-  // También ejecutar cuando Astro cambia de página (para navegación del lado del cliente)
-  document.addEventListener('astro:page-load', setupToggleItems);
+    // Usar delegación de eventos a nivel del body para mejor rendimiento
+    document.body.addEventListener('click', handleToggleClick);
+
+    // Asegurar que los elementos comienzan en el estado correcto
+    document.querySelectorAll('.toggle-items').forEach((btn) => {
+      btn.setAttribute('data-expanded', 'false');
+    });
+  }
+
+  // Función que se ejecuta cuando el DOM está listo
+  function onDOMReady() {
+    setupPricingToggles();
+  }
+
+  // Inicializar de varias maneras para cubrir todos los casos
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onDOMReady);
+  } else {
+    onDOMReady();
+  }
+
+  // También inicializar cuando Astro carga una nueva página (navegación del lado del cliente)
+  document.addEventListener('astro:page-load', setupPricingToggles);
+
+  // Cuando Astro se prepara para cambiar de página
+  document.addEventListener('astro:before-swap', () => {
+    // Limpiar los listeners para evitar duplicados
+    document.body.removeEventListener('click', handleToggleClick);
+  });
 </script>
