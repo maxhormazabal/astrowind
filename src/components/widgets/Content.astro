@@ -5,6 +5,7 @@ import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import Image from '~/components/common/Image.astro';
 import Button from '~/components/ui/Button.astro';
 import ItemGrid from '~/components/ui/ItemGrid.astro';
+import { Icon } from 'astro-icon/components';
 
 const {
   title = await Astro.slots.render('title'),
@@ -15,14 +16,18 @@ const {
   items = [],
   columns,
   image = await Astro.slots.render('image'),
+  images = [],
   isReversed = false,
   isAfterContent = false,
+  isInteractive = false,
 
   id,
   isDark = false,
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
+
+const defaultImage = images && images.length > 0 ? images[0] : image;
 ---
 
 <WidgetWrapper
@@ -54,36 +59,101 @@ const {
           )
         }
 
-        <ItemGrid
-          items={items}
-          columns={columns}
-          defaultIcon="tabler:check"
-          classes={{
-            container: `gap-y-4 md:gap-y-8`,
-            panel: 'max-w-none',
-            title: 'text-lg font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
-            description: 'text-muted dark:text-slate-400 ml-2 rtl:ml-0 rtl:mr-2',
-            icon: 'flex h-7 w-7 items-center justify-center rounded-full bg-green-600 dark:bg-green-700 text-gray-50 p-1',
-            action: 'text-lg font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
-          }}
-        />
+        {isInteractive ? (
+          <div class="timeline-container relative">
+            <div class="timeline-line absolute left-3 top-0 h-full w-[1px] bg-gray-200 dark:bg-gray-700"></div>
+            
+            <div class="timeline-items space-y-12">
+              {items.map((item, index) => (
+                <div 
+                  class="timeline-item relative pl-12" 
+                  data-index={index}
+                >
+                  <div class="timeline-marker absolute left-0 top-1 flex h-6 w-6 items-center justify-center">
+                    <div 
+                      class={`timeline-dot h-3 w-3 rounded-full border-2 ${index === 0 ? 'bg-primary border-primary' : 'bg-white border-gray-300 dark:bg-slate-800 dark:border-gray-600'} cursor-pointer transition-all duration-300`}
+                      data-index={index}
+                    ></div>
+                  </div>
+                  
+                  <div class="timeline-content">
+                    <h3 class="text-xl font-medium leading-6 dark:text-white">{item.title}</h3>
+                    {item.description && (
+                      <div class="description-wrapper overflow-hidden" style={`max-height: ${index === 0 ? '200px' : '0px'}`} data-wrapper={index}>
+                        <p class="mt-3 text-muted dark:text-slate-400 description-text" data-description={index}>
+                          {item.description}
+                        </p>
+                      </div>
+                    )}
+                    {item.callToAction && (
+                      <div class={`mt-4 cta-wrapper overflow-hidden transition-all duration-500 ease-in-out`} style={`max-height: ${index === 0 ? '50px' : '0px'}; opacity: ${index === 0 ? '1' : '0'}`} data-cta-wrapper={index}>
+                        <div data-cta={index}>
+                          <Button variant="link" {...item.callToAction} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <ItemGrid
+            items={items}
+            columns={columns}
+            defaultIcon="tabler:check"
+            classes={{
+              container: `gap-y-4 md:gap-y-8`,
+              panel: 'max-w-none',
+              title: 'text-lg font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
+              description: 'text-muted dark:text-slate-400 ml-2 rtl:ml-0 rtl:mr-2',
+              icon: 'flex h-7 w-7 items-center justify-center rounded-full bg-green-600 dark:bg-green-700 text-gray-50 p-1',
+              action: 'text-lg font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
+            }}
+          />
+        )}
       </div>
       <div aria-hidden="true" class="mt-10 md:mt-0 md:basis-1/2">
         {
-          image && (
+          (image || images.length > 0) && (
             <div class="relative m-auto max-w-4xl">
-              {typeof image === 'string' ? (
-                <Fragment set:html={image} />
+              {isInteractive && images.length > 0 ? (
+                <div class="images-container relative">
+                  {images.map((img, index) => (
+                    typeof img === 'string' ? (
+                      <div 
+                        class={`absolute inset-0 transition-all duration-700 ease-in-out ${index === 0 ? 'opacity-100 transform-none' : 'opacity-0 transform translate-y-4'}`} 
+                        data-image={index}
+                        set:html={img}
+                      />
+                    ) : (
+                      <Image
+                        class={`mx-auto w-full rounded-lg bg-gray-500 shadow-lg transition-all duration-700 ease-in-out ${index === 0 ? 'opacity-100 transform-none' : 'opacity-0 transform translate-y-4 absolute inset-0'}`}
+                        data-image={index}
+                        width={500}
+                        height={500}
+                        widths={[400, 768]}
+                        sizes="(max-width: 768px) 100vw, 432px"
+                        layout="responsive"
+                        {...(img as Record<string, any>)}
+                      />
+                    )
+                  ))}
+                </div>
               ) : (
-                <Image
-                  class="mx-auto w-full rounded-lg bg-gray-500 shadow-lg"
-                  width={500}
-                  height={500}
-                  widths={[400, 768]}
-                  sizes="(max-width: 768px) 100vw, 432px"
-                  layout="responsive"
-                  {...image}
-                />
+                typeof image === 'string' ? (
+                  <Fragment set:html={image} />
+                ) : (
+                  <Image
+                    class="mx-auto w-full rounded-lg bg-gray-500 shadow-lg"
+                    width={500}
+                    height={500}
+                    widths={[400, 768]}
+                    sizes="(max-width: 768px) 100vw, 432px"
+                    layout="responsive"
+                    {...(image as Record<string, any>)}
+                  />
+                )
               )}
             </div>
           )
@@ -92,3 +162,206 @@ const {
     </div>
   </div>
 </WidgetWrapper>
+
+{isInteractive && (
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const timelineDots = document.querySelectorAll('.timeline-dot');
+      
+      if (!timelineDots.length) return;
+
+      // Función para calcular la altura real que un elemento debería tener
+      function getExpandedHeight(element) {
+        // Clonamos el elemento para no afectar el DOM
+        const clone = element.cloneNode(true) as HTMLElement;
+        
+        // Configuramos el clon para medir su altura natural
+        Object.assign(clone.style, {
+          maxHeight: 'none',
+          opacity: '0',
+          position: 'absolute',
+          visibility: 'hidden',
+          display: 'block'
+        });
+        
+        document.body.appendChild(clone);
+        const height = clone.offsetHeight;
+        document.body.removeChild(clone);
+        
+        return height + 'px';
+      }
+
+      // Función para animar la altura de un elemento con smoothness
+      function animateHeight(element, isExpanding) {
+        if (!element) return;
+        
+        if (isExpanding) {
+          // Obtenemos la altura natural que debería tener cuando está expandido
+          const expandedHeight = getExpandedHeight(element);
+          
+          // Primero configuramos la transición
+          (element as HTMLElement).style.transition = 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-in-out';
+          
+          // Luego establecemos la altura y opacidad
+          requestAnimationFrame(() => {
+            (element as HTMLElement).style.maxHeight = expandedHeight;
+            (element as HTMLElement).style.opacity = '1';
+          });
+        } else {
+          // Para contraer, primero configuramos la transición
+          (element as HTMLElement).style.transition = 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-out';
+          
+          // Luego establecemos la altura en 0 y reducimos la opacidad
+          requestAnimationFrame(() => {
+            (element as HTMLElement).style.maxHeight = '0px';
+            (element as HTMLElement).style.opacity = '0';
+          });
+        }
+      }
+
+      function activateDot(index) {
+        // Gestionar las clases de los puntos
+        timelineDots.forEach((dot, i) => {
+          // Actualizar el estilo del punto
+          if (i === index) {
+            dot.classList.remove('bg-white', 'border-gray-300', 'dark:bg-slate-800', 'dark:border-gray-600');
+            dot.classList.add('bg-primary', 'border-primary');
+          } else {
+            dot.classList.remove('bg-primary', 'border-primary');
+            dot.classList.add('bg-white', 'border-gray-300', 'dark:bg-slate-800', 'dark:border-gray-600');
+          }
+          
+          // Gestionar descripciones - usando max-height para animaciones suaves
+          const descWrapper = document.querySelector(`[data-wrapper="${i}"]`);
+          if (descWrapper) {
+            animateHeight(descWrapper, i === index);
+          }
+          
+          // Gestionar CTAs - usando max-height y opacity para animaciones suaves
+          const ctaWrapper = document.querySelector(`[data-cta-wrapper="${i}"]`);
+          if (ctaWrapper) {
+            animateHeight(ctaWrapper, i === index);
+          }
+          
+          // Gestionar imágenes con animación mejorada
+          const img = document.querySelector(`[data-image="${i}"]`);
+          if (img) {
+            if (i === index) {
+              // Aparece con un efecto de fade-in y slide-up
+              img.classList.remove('opacity-0', 'transform', 'translate-y-4');
+              img.classList.add('opacity-100', 'transform-none');
+              
+              // Aseguramos que la imagen activa esté encima con z-index
+              (img as HTMLElement).setAttribute('style', 'z-index: 10');
+            } else {
+              // Desaparece con fade-out y slide-down
+              img.classList.remove('opacity-100', 'transform-none');
+              img.classList.add('opacity-0', 'transform', 'translate-y-4');
+              
+              // Restauramos z-index normal
+              setTimeout(() => {
+                if (!img.classList.contains('opacity-100')) {
+                  (img as HTMLElement).setAttribute('style', 'z-index: 1');
+                }
+              }, 700); // Coincide con la duración de la transición
+            }
+          }
+        });
+      }
+      
+      // Asignar eventos click a los puntos con un pequeño efecto de escala al hacer clic
+      timelineDots.forEach((dot) => {
+        dot.addEventListener('click', function(e) {
+          e.stopPropagation(); // Evitar activación múltiple
+          
+          // Efecto visual al hacer clic
+          (this as HTMLElement).style.transform = 'scale(0.85)';
+          setTimeout(() => {
+            (this as HTMLElement).style.transform = '';
+          }, 150);
+          
+          const index = parseInt(this.getAttribute('data-index') || '0');
+          activateDot(index);
+        });
+      });
+      
+      // Mejorar la interacción al hacer clic en todo el ítem con un efecto visual
+      const timelineItems = document.querySelectorAll('.timeline-item');
+      timelineItems.forEach((item) => {
+        item.addEventListener('click', function() {
+          const index = parseInt(this.getAttribute('data-index') || '0');
+          
+          // Efecto visual al hacer clic
+          (this as HTMLElement).style.transform = 'translateX(8px)';
+          setTimeout(() => {
+            (this as HTMLElement).style.transform = '';
+          }, 250);
+          
+          activateDot(index);
+        });
+      });
+      
+      // Inicializar el primer elemento con una pequeña demora para que la animación sea visible
+      setTimeout(() => {
+        activateDot(0);
+      }, 100);
+    });
+  </script>
+)}
+
+<style>
+  .timeline-item {
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+  
+  .timeline-item:hover {
+    transform: translateX(5px);
+  }
+  
+  .timeline-dot {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                background-color 0.3s ease, 
+                border-color 0.3s ease;
+    will-change: transform, background-color, border-color;
+  }
+  
+  .timeline-item:hover .timeline-dot {
+    transform: scale(1.2);
+  }
+  
+  /* Contenedores de texto con transiciones mejoradas */
+  .description-wrapper {
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    will-change: max-height, opacity;
+  }
+  
+  .cta-wrapper {
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    will-change: max-height, opacity;
+  }
+  
+  /* Contenedor de imágenes con altura dinámica */
+  .images-container {
+    min-height: 300px;
+    position: relative;
+  }
+  
+  @media (min-width: 768px) {
+    .images-container {
+      min-height: 400px;
+    }
+  }
+  
+  /* Optimizaciones de rendimiento */
+  .images-container img,
+  .images-container > div {
+    will-change: opacity, transform;
+  }
+  
+  /* Mejorar la definición del punto activo */
+  .timeline-dot.bg-primary {
+    box-shadow: 0 0 0 3px rgba(var(--aw-color-primary-rgb), 0.15);
+  }
+</style>

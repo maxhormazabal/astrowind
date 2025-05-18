@@ -91,6 +91,7 @@ export interface MetaDataTwitter {
 export interface Image {
   src: string;
   alt?: string;
+  href?: string;
 }
 
 export interface Video {
@@ -281,10 +282,12 @@ export interface Steps extends Omit<Headline, 'classes'>, Widget {
 export interface Content extends Omit<Headline, 'classes'>, Widget {
   content?: string;
   image?: string | unknown;
+  images?: Array<string | unknown>;
   items?: Array<Item>;
   columns?: number;
   isReversed?: boolean;
   isAfterContent?: boolean;
+  isInteractive?: boolean;
   callToAction?: CallToAction;
 }
 

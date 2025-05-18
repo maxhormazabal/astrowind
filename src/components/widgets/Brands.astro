@@ -16,23 +16,95 @@ const {
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
+
+// Función auxiliar para determinar si una ruta de imagen tiene una versión para modo oscuro
+const getDarkImageSrc = (src) => {
+  if (typeof src !== 'string') return null;
+  // Reemplaza _black.svg con _white.svg para el modo oscuro
+  return src.replace('_black.svg', '_white.svg');
+};
 ---
 
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
 
-  <div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
+  <div class="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10 mt-8">
     {icons && icons.map((icon) => <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-gray-500" />)}
     {
       images &&
-        images.map(
-          (image) =>
-            image.src && (
-              <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-                <Image src={image.src} alt={image.alt || ''} class="max-h-12" width={120} height={48} layout="fixed" />
-              </div>
-            )
-        )
+        images.map((image) => {
+          if (!image.src) return null;
+
+          // Obtener la ruta de la imagen para modo oscuro
+          const darkSrc = getDarkImageSrc(image.src);
+
+          const imageComponent = (
+            <div class="flex items-center justify-center h-16 sm:h-20 p-2 rounded-md min-w-[130px]">
+              {/* Imagen para modo claro */}
+              <Image
+                src={image.src}
+                alt={image.alt || ''}
+                class={`h-8 sm:h-12 w-auto object-contain transition-all duration-300 ${image.href ? 'group-hover:scale-110' : ''} dark:hidden`}
+                width={120}
+                height={48}
+              />
+
+              {/* Imagen para modo oscuro */}
+              {darkSrc && (
+                <Image
+                  src={darkSrc}
+                  alt={image.alt || ''}
+                  class={`h-8 sm:h-12 w-auto object-contain transition-all duration-300 ${image.href ? 'group-hover:scale-110' : ''} hidden dark:block`}
+                  width={120}
+                  height={48}
+                />
+              )}
+            </div>
+          );
+
+          // Si tiene href, envolver en un enlace
+          if (image.href) {
+            return (
+              <a
+                href={image.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="brand-link group transition-transform hover:scale-105"
+                title={`Visitar ${image.alt || 'sitio'}`}
+              >
+                {imageComponent}
+              </a>
+            );
+          }
+
+          return imageComponent;
+        })
     }
   </div>
 </WidgetWrapper>
+
+<style>
+  .brand-link {
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .brand-link:hover {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .dark .brand-link:hover {
+    filter: drop-shadow(0 4px 6px rgba(255, 255, 255, 0.1));
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Transición suave entre modo claro y oscuro */
+  :global(.dark) img,
+  :global(html:not(.dark)) img {
+    transition: opacity 0.5s ease-in-out;
+  }
+</style>

@@ -12,6 +12,8 @@ import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Pricing from '~/components/widgets/Pricing.astro';
+import Steps2 from '~/components/widgets/Steps2.astro';
+import Brands from '~/components/widgets/Brands.astro';
 
 const metadata = {
   title: 'Dokken — Plataforma de gestión de documentos con inteligencia artificial',
@@ -140,6 +142,76 @@ const metadata = {
       },
     ]}
   />
+
+  <!-- Interactive Content Widget *************** -->
+
+  <Content
+    tagline="Características Avanzadas"
+    title="Design pixel-perfect sites beyond ordinary"
+    isInteractive={true}
+    items={[
+      {
+        title: 'Advanced typography',
+        description:
+          'Take full control over your text with precision typography tools. Adjust fonts, spacing, and styles to add more character to your design.',
+        callToAction: {
+          text: 'View Details',
+          href: '#',
+          icon: 'tabler:arrow-right',
+        },
+      },
+      {
+        title: 'CSS grids and layouts',
+        description:
+          'Build complex layouts with ease using CSS Grids. Create multi-directional structures, manage spacing, and achieve perfect alignment without limitations.',
+        callToAction: {
+          text: 'View Details',
+          href: '#',
+          icon: 'tabler:arrow-right',
+        },
+      },
+      {
+        title: 'Adaptive design',
+        description:
+          'Create designs that adapt seamlessly to any device or screen size. Ensure optimal user experience from desktop to mobile with responsive frameworks.',
+        callToAction: {
+          text: 'View Details',
+          href: '#',
+          icon: 'tabler:arrow-right',
+        },
+      },
+      {
+        title: 'Designed for efficiency',
+        description:
+          'Optimize your workflow with tools designed for speed and efficiency. Automate repetitive tasks and focus on what matters: creating exceptional designs.',
+        callToAction: {
+          text: 'View Details',
+          href: '#',
+          icon: 'tabler:arrow-right',
+        },
+      },
+    ]}
+    images={[
+      {
+        src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+        alt: 'Typography showcase',
+      },
+      {
+        src: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80',
+        alt: 'CSS Grids showcase',
+      },
+      {
+        src: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+        alt: 'Adaptive Design showcase',
+      },
+      {
+        src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+        alt: 'Efficiency showcase',
+      },
+    ]}
+  >
+    <Fragment slot="content"> Create stunning websites with our intuitive and powerful design tools </Fragment>
+  </Content>
 
   <!-- Pricing Widget **************** -->
 
@@ -466,6 +538,56 @@ const metadata = {
                 `}
   />
 
+  <!-- Brands Widget ****************** -->
+
+  <Brands
+    title="Integrations & Connections"
+    subtitle="Enrich your documents with powerful integrations that allow you to import data or export to multiple platforms, enhancing your document management experience."
+    icons={[]}
+    images={[
+      {
+        src: '~/assets/images/integrations/postgresql_black.svg',
+        alt: 'PostgreSQL',
+        href: 'https://www.postgresql.org/',
+      },
+      {
+        src: '~/assets/images/integrations/mysql_black.svg',
+        alt: 'MySQL',
+        href: 'https://www.mysql.com/',
+      },
+      {
+        src: '~/assets/images/integrations/sage_black.svg',
+        alt: 'Sage',
+        href: 'https://www.sage.com/',
+      },
+      {
+        src: '~/assets/images/integrations/salesforce_black.svg',
+        alt: 'Salesforce',
+        href: 'https://www.salesforce.com/',
+      },
+      {
+        src: '~/assets/images/integrations/googledrive_black.svg',
+        alt: 'Google Drive',
+        href: 'https://www.google.com/drive/',
+      },
+      {
+        src: '~/assets/images/integrations/odoo_black.svg',
+        alt: 'Odoo',
+        href: 'https://www.odoo.com/',
+      },
+      {
+        src: '~/assets/images/integrations/gmail_black.svg',
+        alt: 'Gmail',
+        href: 'https://mail.google.com/',
+      },
+      {
+        src: '~/assets/images/integrations/dropbox_black.svg',
+        alt: 'Dropbox',
+        href: 'https://www.dropbox.com/',
+      },
+    ]}
+  />
+
   <!-- FAQs Widget ******************* -->
 
   <FAQs
@@ -517,7 +639,33 @@ const metadata = {
       { title: 'Precisión', amount: '99.4%' },
     ]}
   />
+  <!-- Steps2 Widget ****************** -->
 
+  <Steps2
+    title="Reach out to us"
+    subtitle="Have questions? Feel free to contact us using the form below. We're here to help!"
+    callToAction={{
+      text: 'Contact us',
+      href: '/',
+    }}
+    items={[
+      {
+        title: 'Email us',
+        description: 'contact@support.com',
+        icon: 'tabler:mail',
+      },
+      {
+        title: 'Call us',
+        description: '+1 (234) 567-890',
+        icon: 'tabler:headset',
+      },
+      {
+        title: 'Follow us',
+        description: '@example',
+        icon: 'tabler:brand-twitter',
+      },
+    ]}
+  />
   <!-- CallToAction Widget *********** -->
 
   <CallToAction
