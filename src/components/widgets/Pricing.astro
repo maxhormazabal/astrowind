@@ -31,7 +31,7 @@ const {
                 <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10">
                   {hasRibbon && ribbonTitle && (
                     <div class="absolute right-[-5px] 2xl:right-[-8px] rtl:right-auto rtl:left-[-8px] rtl:2xl:left-[-10px] top-[-5px] 2xl:top-[-10px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
-                      <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-['']">
+                      <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-[''] ribbon-badge">
                         {ribbonTitle}
                       </span>
                     </div>
@@ -64,7 +64,9 @@ const {
                             ({ description, icon }, index) =>
                               description && (
                                 <li
-                                  class={`mb-1.5 flex items-start space-x-3 leading-7 ${index >= visibleItems ? 'hidden item-hidden' : ''}`}
+                                  class={`mb-1.5 flex items-start space-x-3 leading-7 ${
+                                    index >= visibleItems ? 'hidden item-hidden' : 'visible-item'
+                                  }`}
                                 >
                                   <div class="rounded-full bg-primary mt-1">
                                     <Icon
@@ -79,12 +81,12 @@ const {
                         </ul>
                         {items.length > visibleItems && (
                           <button
-                            class="toggle-items text-sm font-medium text-primary flex items-center mx-auto"
+                            class="toggle-items text-sm font-medium text-primary flex items-center mx-auto hover:text-secondary"
                             data-target={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
                             data-expanded="false"
                             type="button"
                           >
-                            <span class="toggle-text">Ver más</span>
+                            <span class="toggle-text">See more</span>
                             <Icon name="tabler:chevron-down" class="toggle-icon w-5 h-5 transition-transform" />
                           </button>
                         )}
@@ -139,9 +141,82 @@ const {
     align-items: center;
     justify-content: center;
   }
+
+  /* Animación para la etiqueta destacado */
+  .ribbon-badge {
+    animation: ribbonPulse 2s infinite;
+  }
+
+  @keyframes ribbonPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 5px rgba(21, 128, 61, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(21, 128, 61, 0);
+    }
+  }
+
+  /* Animaciones para mostrar y ocultar elementos */
+  .toggle-items {
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .toggle-items:hover {
+    transform: translateY(-2px);
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  .dark .toggle-items:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .toggle-icon {
+    transition: transform 0.5s ease;
+  }
+
+  /* Animación para los elementos siempre visibles */
+  .visible-item {
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  /* Efecto hover para los elementos */
+  .pricing-items li:hover {
+    transform: translateX(3px);
+    color: var(--aw-color-primary);
+  }
+
+  /* Animaciones más suaves para los elementos de lista */
+  .pricing-items li {
+    opacity: 1;
+    max-height: 100px;
+    transform: translateY(0);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.3, 0.7, 0.4, 1.5);
+  }
+
+  .pricing-items li.hidden {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0 !important;
+    transform: translateY(-10px);
+  }
 </style>
 
 <script is:inline define:vars={{ visibleItems }}>
+  // Textos traducidos para los botones
+  const texts = {
+    more: 'See more',
+    less: 'See less',
+  };
+
   // Script para expandir/colapsar los elementos usando delegación de eventos
   function handleToggleClick(event) {
     // Verificar si el click fue en un botón toggle o sus hijos
@@ -153,13 +228,22 @@ const {
     const isExpanded = button.getAttribute('data-expanded') === 'true';
     const newState = !isExpanded;
 
+    // Aplicar un ligero feedback visual al botón
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 150);
+
     // Actualizar todos los botones y listas al mismo estado
     document.querySelectorAll('.toggle-items').forEach((btn) => {
       btn.setAttribute('data-expanded', newState.toString());
       const text = btn.querySelector('.toggle-text');
       const icon = btn.querySelector('.toggle-icon');
 
-      if (text) text.textContent = newState ? 'Ver menos' : 'Ver más';
+      if (text) {
+        text.textContent = newState ? texts.less : texts.more;
+      }
+
       if (icon) {
         if (newState) {
           icon.classList.add('rotate-180');
@@ -169,14 +253,53 @@ const {
       }
     });
 
-    // Mostrar/ocultar todos los elementos ocultos en todas las listas
-    document.querySelectorAll('.item-hidden').forEach((item) => {
+    // Función para animar elementos ocultos - con un enfoque más suave
+    document.querySelectorAll('.item-hidden').forEach((item, index) => {
       if (newState) {
+        // Antes de mostrar, preparamos el elemento
+        item.style.transition = 'all 0.4s cubic-bezier(0.3, 0.7, 0.4, 1.5)';
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(-10px)';
+        item.style.maxHeight = '0';
+
+        // Lo sacamos de hidden para que sea afectado por las transiciones
         item.classList.remove('hidden');
+
+        // Aplicamos un timeout muy pequeño para asegurar que el navegador procese el cambio
+        setTimeout(
+          () => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+            item.style.maxHeight = '100px';
+          },
+          20 + index * 30
+        );
       } else {
-        item.classList.add('hidden');
+        // Animación para ocultar
+        item.style.transition = 'all 0.4s cubic-bezier(0.3, 0.7, 0.4, 1.5)';
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(-10px)';
+        item.style.maxHeight = '0';
+
+        // Una vez completada la animación, añadimos hidden para ocultar del flujo
+        setTimeout(() => {
+          item.classList.add('hidden');
+        }, 400);
       }
     });
+
+    // Dar un efecto sutil a los elementos ya visibles
+    if (document.querySelectorAll('.visible-item').length > 0) {
+      document.querySelectorAll('.visible-item').forEach((item, index) => {
+        item.style.transform = 'translateY(5px)';
+        setTimeout(
+          () => {
+            item.style.transform = 'translateY(0)';
+          },
+          150 + index * 50
+        );
+      });
+    }
   }
 
   // Función para configurar la delegación de eventos
@@ -190,6 +313,24 @@ const {
     // Asegurar que los elementos comienzan en el estado correcto
     document.querySelectorAll('.toggle-items').forEach((btn) => {
       btn.setAttribute('data-expanded', 'false');
+      const text = btn.querySelector('.toggle-text');
+      if (text) text.textContent = texts.more;
+    });
+
+    // Animación inicial para los elementos visibles - más sutil y elegante
+    document.querySelectorAll('.visible-item').forEach((item, index) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(10px)';
+
+      // Efecto de entrada escalonado para cada elemento
+      setTimeout(
+        () => {
+          item.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        },
+        100 + index * 80
+      );
     });
   }
 
