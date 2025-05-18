@@ -14,7 +14,7 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 import Pricing from '~/components/widgets/Pricing.astro';
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'Dokken — Plataforma de gestión de documentos con inteligencia artificial',
   ignoreTitleTemplate: true,
 };
 ---
@@ -26,35 +26,35 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Get template',
+        text: 'Obtener demostración',
         href: 'https://github.com/onwidget/astrowind',
         target: '_blank',
         icon: 'tabler:download',
       },
-      { text: 'Learn more', href: '#features' },
+      { text: 'Saber más', href: '#features' },
     ]}
-    lightImage={{ src: '~/assets/images/hero/laptop_black.png', alt: 'Hero Image - Light Mode' }}
-    darkImage={{ src: '~/assets/images/hero/laptop_white.png', alt: 'Hero Image - Dark Mode' }}
+    lightImage={{ src: '~/assets/images/hero/laptop_black.png', alt: 'Imagen Hero - Modo Claro' }}
+    darkImage={{ src: '~/assets/images/hero/laptop_white.png', alt: 'Imagen Hero - Modo Oscuro' }}
   >
     <Fragment slot="title">
-      <span class="text-accent dark:text-white">Efficient Docs</span>: Power your end-to-end document management
+      <span class="text-accent dark:text-white">Documentos Eficientes</span>: Gestiona tus documentos de principio a fin
     </Fragment>
 
     <Fragment slot="subtitle">
       <span class="hidden sm:inline">
-        <span class="font-semibold">Dokken</span> transforms document processing with AI: extraction, automatic validation
-        via your business rules, and fully configurable workflows.
+        <span class="font-semibold">Dokken</span> transforma el procesamiento de documentos con IA: extracción, validación
+        automática mediante reglas de negocio, y flujos de trabajo totalmente configurables.
       </span>
       <span class="block mb-1 sm:hidden font-bold text-blue-600">
-        Dokken: intelligent documents, optimized processes.
+        Dokken: documentos inteligentes, procesos optimizados.
       </span>
-      Perfect for SMEs and large enterprises looking to save time, cut errors, and automate document workflows.
+      Perfecto para PYMEs y grandes empresas que buscan ahorrar tiempo, reducir errores y automatizar flujos de documentos.
     </Fragment>
   </Hero>
 
   <!-- Note Widget ******************* -->
 
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
+  <Note title="Filosofía:" description="Simplicidad, Mejores Prácticas y Alto Rendimiento" />
 
   <!-- Content Widget **************** -->
 
@@ -98,44 +98,44 @@ const metadata = {
 
   <Features
     id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023 and 2024."
+    tagline="Características"
+    title="Lo que obtiene con Dokken"
+    subtitle="Una de las soluciones más profesionales y completas para el procesamiento de documentos en el mercado actual."
     items={[
       {
-        title: 'Astro + Tailwind CSS Integration',
+        title: 'Integración con Sistemas Empresariales',
         description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility.',
+          'Integración perfecta con ERPs, CRMs y otros sistemas empresariales para un flujo continuo de datos y documentos.',
         icon: 'tabler:brand-tailwind',
       },
       {
-        title: 'Ready-to-use Components',
+        title: 'Componentes Listos para Usar',
         description:
-          'Widgets made with Tailwind CSS ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
+          'Herramientas diseñadas para ser utilizadas en entornos empresariales, departamentos contables, administrativos y de gestión documental.',
         icon: 'tabler:components',
       },
       {
-        title: 'Best Practices',
+        title: 'Mejores Prácticas',
         description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
+          'Creación de soluciones seguras, eficientes y fáciles de usar que proporcionan experiencias excepcionales y valor duradero.',
         icon: 'tabler:list-check',
       },
       {
-        title: 'Excellent Page Speed',
+        title: 'Excelente Velocidad de Procesamiento',
         description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
+          'Una buena velocidad de procesamiento mejora la productividad, optimiza la experiencia de usuario y aumenta las tasas de adopción.',
         icon: 'tabler:rocket',
       },
       {
-        title: 'Search Engine Optimization (SEO)',
+        title: 'Optimización para Flujos de Trabajo',
         description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
+          'La optimización de flujos de trabajo mejora la visibilidad de sus procesos, impulsa la eficiencia y permite alcanzar a más clientes.',
         icon: 'tabler:arrows-right-left',
       },
       {
-        title: 'Open to new ideas and contributions',
+        title: 'Abierto a nuevas ideas y contribuciones',
         description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
+          'Adoptamos una cultura abierta a nuevas ideas y contribuciones que fomenta la innovación, la colaboración y una experiencia de usuario dinámica.',
         icon: 'tabler:bulb',
       },
     ]}
@@ -144,40 +144,130 @@ const metadata = {
   <!-- Pricing Widget **************** -->
 
   <Pricing
-    title="Flexible pricing plans"
+    title="Planes de precios adaptados a tus necesidades"
+    subtitle="Elige el plan que mejor se adapte a tu negocio"
+    visibleItems={2}
     prices={[
       {
-        title: 'free',
-        subtitle: 'Access to core features and a wide range of templates',
+        title: 'Gratis',
+        subtitle: 'Para individuos y pequeños proyectos',
         price: '0',
-        period: '/ month',
+        period: '€',
+        items: [
+          {
+            description: 'Procesa hasta 50 páginas/mes',
+          },
+          {
+            description: 'Solo acceso para el Administrador',
+          },
+          {
+            description: 'Licencia por 1 mes',
+          },
+          {
+            description: 'Uso limitado',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Get Started for Free',
+          text: 'Elegir plan',
           href: '#',
         },
       },
       {
-        title: 'pro',
-        subtitle: 'Premium templates and advanced customization',
-        price: 15,
-        period: '/ Month',
+        title: 'Negocios',
+        subtitle: 'Para empresas en crecimiento',
+        price: 225,
+        period: '€',
+        items: [
+          {
+            description: 'Procesa hasta 500 páginas/mes',
+          },
+          {
+            description: 'Administrador + acceso para 5 usuarios',
+          },
+          {
+            description: 'Extracción avanzada de texto y datos',
+          },
+          {
+            description: 'Definición de reglas de negocio (limitado)',
+          },
+          {
+            description: 'Soporte por correo electrónico 8 horas / 5 días',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Upgrade to Pro',
+          text: 'Elegir plan',
           href: '#',
         },
         hasRibbon: true,
-        ribbonTitle: 'popular',
+        ribbonTitle: 'destacado',
       },
       {
-        title: 'Enterprise',
-        subtitle: 'Tailored solutions for large-scale projects',
-        price: 45,
-        period: '/ Month',
+        title: 'Profesional',
+        subtitle: 'Para usuarios profesionales',
+        price: 525,
+        period: '€',
+        items: [
+          {
+            description: 'Procesa hasta 2000 páginas/mes',
+          },
+          {
+            description: 'Administrador + acceso para 30 usuarios',
+          },
+          {
+            description: 'Suite completa de herramientas de extracción',
+          },
+          {
+            description: 'Conectores básicos para ERP, CRM y otras herramientas empresariales',
+          },
+          {
+            description: 'Definición completa de reglas de negocio',
+          },
+          {
+            description: 'Soporte 24 horas / 7 días',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Unlock Enterprise Features',
+          text: 'Elegir plan',
+          href: '#',
+        },
+      },
+      {
+        title: 'Empresarial',
+        subtitle: 'Para grandes organizaciones',
+        price: '-',
+        period: 'Contáctanos',
+        items: [
+          {
+            description: 'Plataforma de marca blanca con acceso ilimitado de usuarios y páginas',
+          },
+          {
+            description: 'Configuración + Licencia anual',
+          },
+          {
+            description: 'Suite completa de herramientas de extracción',
+          },
+          {
+            description: 'Amplia variedad de conectores de herramientas de TI',
+          },
+          {
+            description: 'Funciones personalizadas y entrenamiento de modelos de IA',
+          },
+          {
+            description: 'Definición completa de reglas de negocio y validación',
+          },
+          {
+            description: 'Soporte premium 24/7',
+          },
+          {
+            description: 'Gerente de cuenta dedicado',
+          },
+        ],
+        callToAction: {
+          target: '_blank',
+          text: 'Elegir plan',
           href: '#',
         },
       },
@@ -370,40 +460,40 @@ const metadata = {
   <!-- FAQs Widget ******************* -->
 
   <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
+    title="Preguntas Frecuentes"
+    subtitle="Explore las siguientes preguntas para obtener información sobre las potentes funcionalidades que Dokken ofrece y cómo puede mejorar su gestión documental."
     tagline="FAQs"
     classes={{ container: 'max-w-6xl' }}
     items={[
       {
-        title: 'Why AstroWind?',
+        title: '¿Por qué elegir Dokken?',
         description:
-          "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
+          'Dokken ofrece una solución completa para la gestión documental con inteligencia artificial, permitiéndole automatizar procesos, reducir errores y ahorrar tiempo valioso en su negocio.',
       },
       {
-        title: 'What do I need to start?',
+        title: '¿Qué necesito para empezar?',
         description:
-          "Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it's actually our duty to future generations.",
+          'Solo necesita sus documentos y una idea clara de sus procesos de negocio. Nosotros nos encargamos de configurar el sistema según sus necesidades específicas.',
       },
       {
-        title: 'How to install the Astro + Tailwind CSS template?',
+        title: '¿Cómo se instala Dokken?',
         description:
-          "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows.",
+          'Dokken es una solución basada en la nube, por lo que no requiere instalación. Simplemente acceda a través de su navegador web y comience a utilizarlo inmediatamente.',
       },
       {
-        title: "What's something that you don't understand?",
+        title: '¿Qué tipo de documentos puede procesar?',
         description:
-          "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
+          'Dokken puede procesar prácticamente cualquier tipo de documento: facturas, albaranes, contratos, formularios, DNIs, pasaportes, informes, y mucho más.',
       },
       {
-        title: 'What is something that you would like to try again?',
+        title: '¿Es seguro almacenar mis documentos en Dokken?',
         description:
-          "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
+          'Absolutamente. Utilizamos cifrado de extremo a extremo y cumplimos con todas las normativas de protección de datos, incluyendo el RGPD europeo.',
       },
       {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
+        title: '¿Puedo personalizar los flujos de trabajo según mis necesidades?',
         description:
-          "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
+          'Sí, Dokken ofrece flujos de trabajo totalmente personalizables que se adaptan a sus procesos específicos de negocio, con reglas de validación configurables y automatización a medida.',
       },
     ]}
   />
@@ -412,10 +502,10 @@ const metadata = {
 
   <Stats
     stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
+      { title: 'Documentos Procesados', amount: '2.3M' },
+      { title: 'Clientes Satisfechos', amount: '24.8K' },
+      { title: 'Horas Ahorradas', amount: '10.3K' },
+      { title: 'Precisión', amount: '99.4%' },
     ]}
   />
 
@@ -425,7 +515,7 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Get template',
+        text: 'Comenzar ahora',
         href: 'https://github.com/onwidget/astrowind',
         target: '_blank',
         icon: 'tabler:download',
@@ -433,12 +523,14 @@ const metadata = {
     ]}
   >
     <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
+      Dokken&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Inteligencia Artificial</span>
     </Fragment>
 
     <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
+      Transforme su gestión documental hoy mismo y únase a las miles de empresas que ya confían en Dokken. <br
+        class="hidden md:inline"
+      />
+      ¡No pierda más tiempo con procesos manuales!
     </Fragment>
   </CallToAction>
 </Layout>

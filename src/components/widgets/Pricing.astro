@@ -10,6 +10,7 @@ const {
   subtitle = '',
   tagline = '',
   prices = [],
+  visibleItems = 2, // Número de elementos visibles por defecto
 
   id,
   isDark = false,
@@ -20,14 +21,14 @@ const {
 
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
-  <div class="flex items-stretch justify-center">
-    <div class="grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+  <div class="flex items-stretch justify-center w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 dark:text-white w-full">
       {
         prices &&
           prices.map(({ title, subtitle, price, period, items, callToAction, hasRibbon = false, ribbonTitle }) => (
-            <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
-              {price && period && (
-                <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center">
+            <div class="mx-auto flex w-full intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+              {period && (
+                <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10">
                   {hasRibbon && ribbonTitle && (
                     <div class="absolute right-[-5px] 2xl:right-[-8px] rtl:right-auto rtl:left-[-8px] rtl:2xl:left-[-10px] top-[-5px] 2xl:top-[-10px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
                       <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-['']">
@@ -42,34 +43,64 @@ const {
                     {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
                     <div class="my-8">
                       <div class="flex items-center justify-center text-center mb-1">
-                        <span class="text-5xl">$</span>
-                        <span class="text-6xl font-extrabold">{price}</span>
+                        {price !== '' && (
+                          <>
+                            <span class="text-5xl">€</span>
+                            <span class="text-6xl font-extrabold">{price}</span>
+                          </>
+                        )}
                       </div>
                       <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
                     </div>
                     {items && (
-                      <ul class="my-8 md:my-10 space-y-2 text-left">
-                        {items.map(
-                          ({ description, icon }) =>
-                            description && (
-                              <li class="mb-1.5 flex items-start space-x-3 leading-7">
-                                <div class="rounded-full bg-primary mt-1">
-                                  <Icon name={icon ? icon : 'tabler:check'} class="w-5 h-5 font-bold p-1 text-white" />
-                                </div>
-                                <span>{description}</span>
-                              </li>
-                            )
+                      <div>
+                        <ul
+                          class="my-8 md:my-10 space-y-2 text-left"
+                          id={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          {items.map(
+                            ({ description, icon }, index) =>
+                              description && (
+                                <li
+                                  class={`mb-1.5 flex items-start space-x-3 leading-7 ${index >= visibleItems ? 'hidden item-hidden' : ''}`}
+                                >
+                                  <div class="rounded-full bg-primary mt-1">
+                                    <Icon
+                                      name={icon ? icon : 'tabler:check'}
+                                      class="w-5 h-5 font-bold p-1 text-white"
+                                    />
+                                  </div>
+                                  <span>{description}</span>
+                                </li>
+                              )
+                          )}
+                        </ul>
+                        {items.length > visibleItems && (
+                          <button
+                            class="toggle-items text-sm font-medium text-primary flex items-center mx-auto"
+                            data-target={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
+                            data-expanded="false"
+                          >
+                            <span class="toggle-text">Ver más</span>
+                            <Icon name="tabler:chevron-down" class="toggle-icon w-5 h-5 transition-transform" />
+                          </button>
                         )}
-                      </ul>
+                      </div>
                     )}
                   </div>
                   {callToAction && (
-                    <div class={`flex justify-center`}>
+                    <div class={`flex justify-center mt-6`}>
                       {typeof callToAction === 'string' ? (
                         <Fragment set:html={callToAction} />
                       ) : (
                         callToAction &&
-                        callToAction.href && <Button {...(hasRibbon ? { variant: 'primary' } : {})} {...callToAction} />
+                        callToAction.href && (
+                          <Button
+                            {...(hasRibbon ? { variant: 'primary' } : {})}
+                            {...callToAction}
+                            class="transition-transform hover:scale-105"
+                          />
+                        )
                       )}
                     </div>
                   )}
@@ -81,3 +112,46 @@ const {
     </div>
   </div>
 </WidgetWrapper>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  // Script para expandir/colapsar los elementos
+  function setupToggleItems() {
+    document.querySelectorAll('.toggle-items').forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetId = button.getAttribute('data-target');
+        const isExpanded = button.getAttribute('data-expanded') === 'true';
+        const newState = !isExpanded;
+
+        // Actualizar todos los botones y listas al mismo estado
+        document.querySelectorAll('.toggle-items').forEach((btn) => {
+          btn.setAttribute('data-expanded', newState.toString());
+          const text = btn.querySelector('.toggle-text');
+          const icon = btn.querySelector('.toggle-icon');
+
+          if (text) text.textContent = newState ? 'Ver menos' : 'Ver más';
+          if (icon) {
+            // Usar classList en lugar de style para mayor compatibilidad
+            icon.classList.toggle('rotate-180', newState);
+          }
+        });
+
+        // Mostrar/ocultar todos los elementos ocultos en todas las listas
+        document.querySelectorAll('.item-hidden').forEach((item) => {
+          item.classList.toggle('hidden', !newState);
+        });
+      });
+    });
+  }
+
+  // Ejecutar después de que el DOM esté cargado
+  document.addEventListener('DOMContentLoaded', setupToggleItems);
+
+  // También ejecutar cuando Astro cambia de página (para navegación del lado del cliente)
+  document.addEventListener('astro:page-load', setupToggleItems);
+</script>
