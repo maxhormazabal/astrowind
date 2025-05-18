@@ -146,6 +146,8 @@ export interface Price {
   subtitle?: string;
   description?: string;
   price?: number | string;
+  priceMonthly?: number | string;
+  priceYearly?: number | string;
   period?: string;
   items?: Array<Item>;
   callToAction?: CallToAction;
@@ -232,6 +234,11 @@ export interface Stats extends Omit<Headline, 'classes'>, Widget {
 export interface Pricing extends Omit<Headline, 'classes'>, Widget {
   prices?: Array<Price>;
   visibleItems?: number;
+  defaultPeriod?: 'monthly' | 'yearly';
+  showToggle?: boolean;
+  monthlyBillingText?: string;
+  yearlyBillingText?: string;
+  hide_links?: boolean;
 }
 
 export interface Testimonials extends Omit<Headline, 'classes'>, Widget {

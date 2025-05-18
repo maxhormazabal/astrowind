@@ -147,12 +147,18 @@ const metadata = {
     title="Pricing plans tailored to your needs"
     subtitle="Choose the plan that best fits your business"
     visibleItems={2}
+    defaultPeriod="monthly"
+    showToggle={true}
+    hide_links={true}
+    monthlyBillingText="Billed monthly"
+    yearlyBillingText="Billed annually"
     prices={[
       {
         title: 'Free',
         subtitle: 'For individuals and small projects',
-        price: '0',
-        period: '€',
+        priceMonthly: '0',
+        priceYearly: '0',
+        period: '-',
         items: [
           {
             description: 'Process up to 50 pages/month',
@@ -176,8 +182,9 @@ const metadata = {
       {
         title: 'Business',
         subtitle: 'For growing companies',
-        price: 225,
-        period: '€',
+        priceMonthly: 225,
+        priceYearly: 195,
+        period: '-',
         items: [
           {
             description: 'Process up to 500 pages/month',
@@ -206,8 +213,9 @@ const metadata = {
       {
         title: 'Professional',
         subtitle: 'For professional users',
-        price: 525,
-        period: '€',
+        priceMonthly: 525,
+        priceYearly: 495,
+        period: '-',
         items: [
           {
             description: 'Process up to 2000 pages/month',
@@ -237,8 +245,9 @@ const metadata = {
       {
         title: 'Enterprise',
         subtitle: 'For large organizations',
-        price: '-',
-        period: 'Contact us',
+        priceMonthly: '-',
+        priceYearly: '-',
+        period: '-',
         items: [
           {
             description: 'White-label platform with unlimited users and pages access',

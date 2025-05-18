@@ -11,6 +11,11 @@ const {
   tagline = '',
   prices = [],
   visibleItems = 2, // Número de elementos visibles por defecto
+  defaultPeriod = 'monthly', // Periodo por defecto
+  showToggle = true, // Mostrar el toggle por defecto
+  monthlyBillingText = 'Billed monthly', // Texto para facturación mensual
+  yearlyBillingText = 'Billed annually', // Texto para facturación anual
+  hide_links = false, // Ocultar botones de llamada a la acción
 
   id,
   isDark = false,
@@ -21,98 +26,173 @@ const {
 
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
+
+  {
+    showToggle && (
+      <div class="flex items-center justify-center mb-8">
+        <div class="relative inline-flex">
+          <div class="pricing-toggle-container">
+            <input
+              type="checkbox"
+              id="billingToggle"
+              class="sr-only"
+              data-pricing-toggle
+              checked={defaultPeriod === 'yearly'}
+            />
+            <label for="billingToggle" class="flex cursor-pointer items-center gap-2">
+              <span class={`text-sm font-medium ${defaultPeriod === 'monthly' ? 'text-primary' : 'text-gray-500'}`}>
+                {monthlyBillingText}
+              </span>
+              <div class="relative h-6 w-11 rounded-full bg-gray-200 transition dark:bg-gray-700">
+                <div
+                  class={`${defaultPeriod === 'yearly' ? 'translate-x-5' : 'translate-x-0'} absolute left-0.5 top-0.5 h-5 w-5 transform rounded-full bg-primary transition dark:bg-blue-500`}
+                />
+              </div>
+              <span class={`text-sm font-medium ${defaultPeriod === 'yearly' ? 'text-primary' : 'text-gray-500'}`}>
+                {yearlyBillingText}
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   <div class="flex items-stretch justify-center w-full">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 dark:text-white w-full">
       {
         prices &&
-          prices.map(({ title, subtitle, price, period, items, callToAction, hasRibbon = false, ribbonTitle }) => (
-            <div class="mx-auto flex w-full intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
-              {period && (
-                <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10">
-                  {hasRibbon && ribbonTitle && (
-                    <div class="absolute right-[-5px] 2xl:right-[-8px] rtl:right-auto rtl:left-[-8px] rtl:2xl:left-[-10px] top-[-5px] 2xl:top-[-10px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
-                      <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-[''] ribbon-badge">
-                        {ribbonTitle}
-                      </span>
-                    </div>
-                  )}
-                  <div class="px-2 py-0 flex flex-col flex-1">
-                    {title && (
-                      <h3 class="text-center text-xl font-semibold uppercase leading-6 tracking-wider mb-2">{title}</h3>
-                    )}
-                    <div class="subtitle-container">
-                      {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
-                    </div>
-                    <div class="my-8 flex-grow-0">
-                      <div class="flex items-center justify-center text-center mb-1">
-                        {price !== '' && (
-                          <>
-                            <span class="text-5xl">€</span>
-                            <span class="text-6xl font-extrabold">{price}</span>
-                          </>
-                        )}
+          prices.map(
+            ({
+              title,
+              subtitle,
+              price,
+              priceMonthly,
+              priceYearly,
+              period,
+              items,
+              callToAction,
+              hasRibbon = false,
+              ribbonTitle,
+            }) => (
+              <div class="mx-auto flex w-full intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+                {/* Usamos period o los nuevos precios para determinar si mostrar la tarjeta */}
+                {(period || priceMonthly || priceYearly) && (
+                  <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10">
+                    {hasRibbon && ribbonTitle && (
+                      <div class="absolute right-[-5px] 2xl:right-[-8px] rtl:right-auto rtl:left-[-8px] rtl:2xl:left-[-10px] top-[-5px] 2xl:top-[-10px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
+                        <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-[''] ribbon-badge">
+                          {ribbonTitle}
+                        </span>
                       </div>
-                      <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
-                    </div>
-                    {items && (
-                      <div class="flex-grow">
-                        <ul
-                          class="my-8 md:my-10 space-y-2 text-left pricing-items"
-                          id={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
-                        >
-                          {items.map(
-                            ({ description, icon }, index) =>
-                              description && (
-                                <li
-                                  class={`mb-1.5 flex items-start space-x-3 leading-7 ${
-                                    index >= visibleItems ? 'hidden item-hidden' : 'visible-item'
-                                  }`}
-                                >
-                                  <div class="rounded-full bg-primary mt-1">
-                                    <Icon
-                                      name={icon ? icon : 'tabler:check'}
-                                      class="w-5 h-5 font-bold p-1 text-white"
-                                    />
-                                  </div>
-                                  <span>{description}</span>
-                                </li>
-                              )
-                          )}
-                        </ul>
-                        {items.length > visibleItems && (
-                          <button
-                            class="toggle-items text-sm font-medium text-primary flex items-center mx-auto hover:text-secondary"
-                            data-target={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
-                            data-expanded="false"
-                            type="button"
+                    )}
+                    <div class="px-2 py-0 flex flex-col flex-1">
+                      {title && (
+                        <h3 class="text-center text-xl font-semibold uppercase leading-6 tracking-wider mb-2">
+                          {title}
+                        </h3>
+                      )}
+                      <div class="subtitle-container">
+                        {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
+                      </div>
+                      <div class="my-8 flex-grow-0">
+                        <div class="flex items-center justify-center text-center mb-1">
+                          {/* Mostramos el precio según el período seleccionado */}
+                          <div class="pricing-price-container">
+                            <div class="pricing-amount monthly-price">
+                              {priceMonthly !== undefined && (
+                                <>
+                                  <span class="text-5xl">€</span>
+                                  <span class="text-6xl font-extrabold">{priceMonthly}</span>
+                                </>
+                              )}
+                              {!priceMonthly && price !== undefined && price !== '' && (
+                                <>
+                                  <span class="text-5xl">€</span>
+                                  <span class="text-6xl font-extrabold">{price}</span>
+                                </>
+                              )}
+                            </div>
+                            <div class="pricing-amount yearly-price">
+                              {priceYearly !== undefined && (
+                                <>
+                                  <span class="text-5xl">€</span>
+                                  <span class="text-6xl font-extrabold">{priceYearly}</span>
+                                </>
+                              )}
+                              {!priceYearly && price !== undefined && price !== '' && (
+                                <>
+                                  <span class="text-5xl">€</span>
+                                  <span class="text-6xl font-extrabold">{price}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400 period-text">
+                          {period}
+                        </span>
+                      </div>
+                      {items && (
+                        <div class="flex-grow">
+                          <ul
+                            class="my-8 md:my-10 space-y-2 text-left pricing-items"
+                            id={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
                           >
-                            <span class="toggle-text">See more</span>
-                            <Icon name="tabler:chevron-down" class="toggle-icon w-5 h-5 transition-transform" />
-                          </button>
+                            {items.map(
+                              ({ description, icon }, index) =>
+                                description && (
+                                  <li
+                                    class={`mb-1.5 flex items-start space-x-3 leading-7 ${
+                                      index >= visibleItems ? 'hidden item-hidden' : 'visible-item'
+                                    }`}
+                                  >
+                                    <div class="rounded-full bg-primary mt-1">
+                                      <Icon
+                                        name={icon ? icon : 'tabler:check'}
+                                        class="w-5 h-5 font-bold p-1 text-white"
+                                      />
+                                    </div>
+                                    <span>{description}</span>
+                                  </li>
+                                )
+                            )}
+                          </ul>
+                          {items.length > visibleItems && (
+                            <button
+                              class="toggle-items text-sm font-medium text-primary flex items-center mx-auto hover:text-secondary"
+                              data-target={`plan-items-${title?.toLowerCase().replace(/\s+/g, '-')}`}
+                              data-expanded="false"
+                              type="button"
+                            >
+                              <span class="toggle-text">See more</span>
+                              <Icon name="tabler:chevron-down" class="toggle-icon w-5 h-5 transition-transform" />
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {callToAction && !hide_links && (
+                      <div class={`flex justify-center mt-6`}>
+                        {typeof callToAction === 'string' ? (
+                          <Fragment set:html={callToAction} />
+                        ) : (
+                          callToAction &&
+                          callToAction.href && (
+                            <Button
+                              {...(hasRibbon ? { variant: 'primary' } : {})}
+                              {...callToAction}
+                              class="transition-transform hover:scale-105"
+                            />
+                          )
                         )}
                       </div>
                     )}
                   </div>
-                  {callToAction && (
-                    <div class={`flex justify-center mt-6`}>
-                      {typeof callToAction === 'string' ? (
-                        <Fragment set:html={callToAction} />
-                      ) : (
-                        callToAction &&
-                        callToAction.href && (
-                          <Button
-                            {...(hasRibbon ? { variant: 'primary' } : {})}
-                            {...callToAction}
-                            class="transition-transform hover:scale-105"
-                          />
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))
+                )}
+              </div>
+            )
+          )
       }
     </div>
   </div>
@@ -140,6 +220,58 @@ const {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* Estilos para el toggle de precios */
+  .pricing-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  .dark .pricing-toggle-container {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Contenedor de precios para animar la transición */
+  .pricing-price-container {
+    position: relative;
+    height: 5rem;
+    width: 100%;
+  }
+
+  .pricing-amount {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  /* Por defecto, mostramos el precio mensual */
+  .pricing-amount.monthly-price {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Clase activa para cuando seleccionamos precios anuales */
+  .yearly-active .pricing-amount.monthly-price {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  .yearly-active .pricing-amount.yearly-price {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Animación para la etiqueta destacado */
@@ -210,12 +342,63 @@ const {
   }
 </style>
 
-<script is:inline define:vars={{ visibleItems }}>
-  // Textos traducidos para los botones
+<script is:inline define:vars={{ visibleItems, defaultPeriod, monthlyBillingText, yearlyBillingText }}>
+  // Textos para los botones
   const texts = {
     more: 'See more',
     less: 'See less',
+    monthly: monthlyBillingText || 'Billed monthly',
+    yearly: yearlyBillingText || 'Billed annually',
   };
+
+  // Función para manejar el toggle de precios (monthly/yearly)
+  function handlePricingToggle() {
+    const toggle = document.querySelector('[data-pricing-toggle]');
+    const pricingContainers = document.querySelectorAll('.pricing-price-container');
+    const periodTexts = document.querySelectorAll('.period-text');
+    const monthlyLabel = document.querySelector('label[for="billingToggle"] span:first-child');
+    const yearlyLabel = document.querySelector('label[for="billingToggle"] span:last-child');
+    const toggleBall = document.querySelector('label[for="billingToggle"] div div');
+
+    if (!toggle) return;
+
+    function updatePricingDisplay(isYearly) {
+      // Actualizamos las clases para mostrar los precios adecuados
+      pricingContainers.forEach((container) => {
+        if (isYearly) {
+          container.classList.add('yearly-active');
+        } else {
+          container.classList.remove('yearly-active');
+        }
+      });
+
+      // Actualizamos el texto del período
+      periodTexts.forEach((text) => {
+        if (text.textContent && text.textContent.trim() !== '') {
+          text.textContent = isYearly ? texts.yearly : texts.monthly;
+        }
+      });
+
+      // Actualizamos la apariencia del toggle
+      if (monthlyLabel && yearlyLabel) {
+        monthlyLabel.className = isYearly ? 'text-sm font-medium text-gray-500' : 'text-sm font-medium text-primary';
+        yearlyLabel.className = isYearly ? 'text-sm font-medium text-primary' : 'text-sm font-medium text-gray-500';
+      }
+
+      if (toggleBall) {
+        toggleBall.classList.toggle('translate-x-5', isYearly);
+        toggleBall.classList.toggle('translate-x-0', !isYearly);
+      }
+    }
+
+    // Estado inicial
+    updatePricingDisplay(toggle.checked);
+
+    // Event listener para el cambio de toggle
+    toggle.addEventListener('change', () => {
+      updatePricingDisplay(toggle.checked);
+    });
+  }
 
   // Script para expandir/colapsar los elementos usando delegación de eventos
   function handleToggleClick(event) {
@@ -304,6 +487,9 @@ const {
 
   // Función para configurar la delegación de eventos
   function setupPricingToggles() {
+    // Inicializa el toggle de precios
+    handlePricingToggle();
+
     // Limpiar eventos anteriores para evitar duplicados
     document.body.removeEventListener('click', handleToggleClick);
 
