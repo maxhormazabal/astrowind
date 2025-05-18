@@ -2,6 +2,11 @@
 import { Icon } from 'astro-icon/components';
 import { SITE } from 'astrowind:config';
 import { getHomePermalink } from '~/utils/permalinks';
+import Image from '~/components/common/Image.astro';
+
+// Importar las imágenes directamente
+import logoWhite from '~/assets/logos/gain_white.svg';
+import logoBlack from '~/assets/logos/gain_white.svg';
 
 interface Link {
   text?: string;
@@ -26,46 +31,47 @@ export interface Props {
 const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme = 'light' } = Astro.props;
 ---
 
-<footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 dark:border-slate-800 not-prose']}>
-  <div class="dark:bg-dark absolute inset-0 pointer-events-none" aria-hidden="true"></div>
-  <div
-    class="relative max-w-7xl mx-auto px-4 sm:px-6 dark:text-slate-300 intersect-once intersect-quarter intercept-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-  >
-    <div class="grid grid-cols-12 gap-4 gap-y-8 sm:gap-8 py-8 md:py-12">
-      <div class="col-span-12 lg:col-span-4">
-        <div class="mb-2">
-          <a class="inline-block font-bold text-xl" href={getHomePermalink()}>{SITE?.name}</a>
+<footer class="dark:bg-[#030621] bg-[#1B1F22] text-white py-12 not-prose">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Logo y texto de proyecto -->
+      <div class="flex flex-col">
+        <div class="mb-4">
+          <!-- Logo para modo oscuro (visible solo en modo oscuro) -->
+          <img
+            src={logoWhite.src}
+            alt="Dokken Logo"
+            class="h-16 w-auto object-contain hidden dark:block"
+            width={logoWhite.width}
+            height={logoWhite.height}
+          />
+          <!-- Logo para modo claro (visible solo en modo claro) -->
+          <img
+            src={logoBlack.src}
+            alt="Dokken Logo"
+            class="h-16 w-auto object-contain dark:hidden"
+            width={logoBlack.width}
+            height={logoBlack.height}
+          />
         </div>
-        <div class="text-sm text-muted flex gap-1">
-          {
-            secondaryLinks.map(({ text, href }, index) => (
-              <>
-                {index !== 0 ? ' · ' : ''}
-                <a
-                  class="text-muted hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out"
-                  href={href}
-                  set:html={text}
-                />
-              </>
-            ))
-          }
-        </div>
+        <p class="text-sm mt-2 text-gray-300" set:html={footNote} />
       </div>
+
+      <!-- Enlaces legales -->
       {
         links.map(({ title, links }) => (
-          <div class="col-span-6 md:col-span-3 lg:col-span-2">
-            <div class="dark:text-gray-300 font-medium mb-2">{title}</div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">{title}</h3>
             {links && Array.isArray(links) && links.length > 0 && (
-              <ul class="text-sm">
+              <ul class="space-y-3">
                 {links.map(({ text, href, ariaLabel }) => (
-                  <li class="mb-2">
+                  <li>
                     <a
-                      class="text-muted hover:text-gray-700 hover:underline dark:text-gray-400 transition duration-150 ease-in-out"
+                      class="text-gray-300 hover:text-white transition duration-150 ease-in-out"
                       href={href}
                       aria-label={ariaLabel}
-                    >
-                      <Fragment set:html={text} />
-                    </a>
+                      set:html={text}
+                    />
                   </li>
                 ))}
               </ul>
@@ -73,32 +79,39 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
           </div>
         ))
       }
-    </div>
-    <div class="md:flex md:items-center md:justify-between py-6 md:py-8">
-      {
-        socialLinks?.length ? (
-          <ul class="flex mb-4 md:order-1 -ml-2 md:ml-4 md:mb-0 rtl:ml-0 rtl:-mr-2 rtl:md:ml-0 rtl:md:mr-4">
-            {socialLinks.map(({ ariaLabel, href, text, icon }) => (
-              <li>
+
+      <!-- Contacto y redes sociales -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contáctenos</h3>
+        <ul class="space-y-3">
+          {
+            links
+              .filter((section) => section.title === 'Contáctenos')[0]
+              ?.links.map(({ text }) => <li class="text-gray-300" set:html={text} />)
+          }
+        </ul>
+
+        <!-- Redes sociales -->
+        <div class="flex space-x-4 mt-6">
+          {
+            socialLinks?.length &&
+              socialLinks.map(({ ariaLabel, href, icon }) => (
                 <a
-                  class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+                  class="text-gray-400 hover:text-white transition duration-150 ease-in-out"
                   aria-label={ariaLabel}
                   href={href}
                 >
                   {icon && <Icon name={icon} class="w-5 h-5" />}
-                  <Fragment set:html={text} />
                 </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ''
-        )
-      }
-
-      <div class="text-sm mr-4 dark:text-muted">
-        <Fragment set:html={footNote} />
+              ))
+          }
+        </div>
       </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
+      © {new Date().getFullYear()} Dokken. Todos los derechos reservados.
     </div>
   </div>
 </footer>
