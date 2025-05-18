@@ -1,0 +1,97 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import AnimationsDemo from '~/components/widgets/AnimationsDemo.astro';
+import Hero from '~/components/widgets/Hero.astro';
+
+const metadata = {
+  title: 'Animaciones - Sistema de animaciones reutilizables',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    tagline="Sistema de animaciones"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Ver ejemplos',
+        href: '#animaciones',
+      },
+      { text: 'Documentación', href: '#docs' },
+    ]}
+    lightImage={{ src: '~/assets/images/hero/laptop_black.png', alt: 'Hero Image - Light Mode' }}
+    darkImage={{ src: '~/assets/images/hero/laptop_white.png', alt: 'Hero Image - Dark Mode' }}
+  >
+    <Fragment slot="title">
+      <span class="text-accent dark:text-white animate-fadeIn">Sistema de animaciones</span> CSS reutilizables
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      <span class="animate-fadeInUp block">
+        Colección de animaciones CSS listas para usar en cualquier componente. Diseñadas para funcionar con Tailwind CSS
+        y completamente personalizables.
+      </span>
+    </Fragment>
+  </Hero>
+
+  <!-- Animations Demo Section -->
+  <div id="animaciones">
+    <AnimationsDemo />
+  </div>
+
+  <!-- Documentation Section -->
+  <section id="docs" class="py-16 bg-white dark:bg-slate-900">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-4xl font-bold mb-8 text-center">Documentación</h2>
+
+        <div class="prose prose-lg dark:prose-invert max-w-none">
+          <h3>Instalación</h3>
+          <p>El sistema de animaciones ya está integrado en este proyecto. Para usarlo, simplemente:</p>
+          <ol>
+            <li>Importa las animaciones en cualquier archivo CSS o SCSS</li>
+            <li>Añade las clases de animación a tus elementos HTML</li>
+          </ol>
+
+          <h3 class="mt-8">Uso</h3>
+          <p>Añade las clases de animación directamente a tus elementos HTML:</p>
+
+          <pre
+            class="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg overflow-x-auto"><code>&lt;div class="animate-fadeIn"&gt;
+  Este elemento aparecerá con un efecto de fade in
+&lt;/div&gt;
+
+&lt;button class="animate-pulse-custom"&gt;
+  Este botón pulsará continuamente
+&lt;/button&gt;
+
+&lt;div class="animate-fadeInUp duration-500 delay-300"&gt;
+  Este elemento aparecerá desde abajo, más rápido y con retraso
+&lt;/div&gt;</code></pre>
+
+          <h3 class="mt-8">Personalización</h3>
+          <p>Puedes personalizar las animaciones de varias formas:</p>
+
+          <h4 class="mt-4">1. Usando los modificadores</h4>
+          <ul>
+            <li><code>duration-300</code>, <code>duration-500</code>, etc. - Cambia la duración</li>
+            <li><code>delay-100</code>, <code>delay-300</code>, etc. - Añade retraso</li>
+            <li><code>ease-linear</code>, <code>ease-in</code>, etc. - Modifica la función de temporización</li>
+          </ul>
+
+          <h4 class="mt-4">2. Modificando el archivo CSS</h4>
+          <p>Personaliza las animaciones editando <code>src/assets/styles/animations.css</code></p>
+
+          <h4 class="mt-4">3. Extendiendo Tailwind</h4>
+          <p>
+            Añade nuevas animaciones en <code>tailwind.config.js</code> en las secciones <code>animation</code> y <code
+              >keyframes</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+

@@ -1,0 +1,263 @@
+---
+// AnimationsDemo.astro - Componente para mostrar las animaciones disponibles
+---
+
+<section class="py-16 bg-blue-50 dark:bg-slate-800">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4">Animaciones disponibles</h2>
+      <p class="text-lg text-gray-700 dark:text-gray-300">
+        Usa estas animaciones en cualquier componente añadiendo las clases correspondientes.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Fade animations -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Fade In</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-primary rounded-lg animate-fadeIn"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-fadeIn</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Fade In Up</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-secondary rounded-lg animate-fadeInUp"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-fadeInUp</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Fade In Down</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-accent rounded-lg animate-fadeInDown"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-fadeInDown</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Fade In Left</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-blue-500 rounded-lg animate-fadeInLeft"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-fadeInLeft</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Fade In Right</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-purple-500 rounded-lg animate-fadeInRight"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-fadeInRight</code>
+        </div>
+      </div>
+
+      <!-- Scale animations -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Scale In</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-green-500 rounded-lg animate-scaleIn"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-scaleIn</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Pulse</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-red-500 rounded-lg animate-pulse-custom"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-pulse-custom</code>
+        </div>
+      </div>
+
+      <!-- Rotate animations -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Rotate</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-yellow-500 rounded-lg animate-rotate flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-rotate</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Shake</h3>
+        <div class="flex justify-center">
+          <button
+            class="w-24 h-24 bg-orange-500 rounded-lg flex items-center justify-center text-white hover:animate-shake focus:outline-none"
+            onclick="this.classList.add('animate-shake'); setTimeout(() => this.classList.remove('animate-shake'), 500);"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-shake</code>
+          <p class="text-xs mt-1 text-gray-600 dark:text-gray-400">(Haz clic para ver)</p>
+        </div>
+      </div>
+
+      <!-- Floating animations -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Floating</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-teal-500 rounded-lg animate-floating flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-floating</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Floating Gentle</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-indigo-500 rounded-lg animate-floating-gentle flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-floating-gentle</code>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4 text-center">Floating Strong</h3>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-fuchsia-500 rounded-lg animate-floating-strong flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">animate-floating-strong</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto mt-16">
+      <h3 class="text-2xl font-bold mb-4 text-center">Modificadores</h3>
+      <p class="text-lg text-gray-700 dark:text-gray-300 mb-6 text-center">
+        Combina las animaciones con estos modificadores para más control.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-md">
+          <h4 class="font-semibold mb-2 text-center">Duración</h4>
+          <div class="space-y-2 text-center">
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">duration-300</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">duration-500</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">duration-1000</code>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-md">
+          <h4 class="font-semibold mb-2 text-center">Retraso</h4>
+          <div class="space-y-2 text-center">
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">delay-100</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">delay-300</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">delay-500</code>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-md">
+          <h4 class="font-semibold mb-2 text-center">Timing</h4>
+          <div class="space-y-2 text-center">
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">ease-linear</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">ease-in</code>
+            <code class="block bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">ease-out</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-md">
+        <h4 class="font-semibold mb-4 text-center">Ejemplo combinado</h4>
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-primary rounded-lg animate-fadeInUp duration-1000 delay-300 ease-out"></div>
+        </div>
+        <div class="mt-4 text-center">
+          <code class="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">
+            animate-fadeInUp duration-1000 delay-300 ease-out
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
