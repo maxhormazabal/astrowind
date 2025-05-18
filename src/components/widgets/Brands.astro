@@ -28,7 +28,7 @@ const getDarkImageSrc = (src) => {
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
 
-  <div class="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10 mt-8">
+  <div class="flex flex-wrap justify-center gap-10 sm:gap-14 md:gap-20 mt-10 max-w-5xl mx-auto px-4">
     {icons && icons.map((icon) => <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-gray-500" />)}
     {
       images &&
@@ -39,14 +39,14 @@ const getDarkImageSrc = (src) => {
           const darkSrc = getDarkImageSrc(image.src);
 
           const imageComponent = (
-            <div class="flex items-center justify-center h-16 sm:h-20 p-2 rounded-md min-w-[130px]">
+            <div class="flex items-center justify-center h-32 sm:h-36 w-[220px] sm:w-[240px] p-8 mx-auto sm:mx-4 my-4">
               {/* Imagen para modo claro */}
               <Image
                 src={image.src}
                 alt={image.alt || ''}
-                class={`h-8 sm:h-12 w-auto object-contain transition-all duration-300 ${image.href ? 'group-hover:scale-110' : ''} dark:hidden`}
-                width={120}
-                height={48}
+                class={`max-h-24 sm:max-h-28 w-auto object-contain transition-transform duration-500 ease-in-out ${image.href ? 'group-hover:scale-110' : ''} dark:hidden`}
+                width={200}
+                height={100}
               />
 
               {/* Imagen para modo oscuro */}
@@ -54,9 +54,9 @@ const getDarkImageSrc = (src) => {
                 <Image
                   src={darkSrc}
                   alt={image.alt || ''}
-                  class={`h-8 sm:h-12 w-auto object-contain transition-all duration-300 ${image.href ? 'group-hover:scale-110' : ''} hidden dark:block`}
-                  width={120}
-                  height={48}
+                  class={`max-h-24 sm:max-h-28 w-auto object-contain transition-transform duration-500 ease-in-out ${image.href ? 'group-hover:scale-110' : ''} hidden dark:block`}
+                  width={200}
+                  height={100}
                 />
               )}
             </div>
@@ -69,7 +69,7 @@ const getDarkImageSrc = (src) => {
                 href={image.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="brand-link group transition-transform hover:scale-105"
+                class="brand-link group"
                 title={`Visitar ${image.alt || 'sitio'}`}
               >
                 {imageComponent}
@@ -84,22 +84,9 @@ const getDarkImageSrc = (src) => {
 </WidgetWrapper>
 
 <style>
+  /* Estilo simple solo para enlaces - sin sombras ni bordes */
   .brand-link {
-    display: inline-block;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-  }
-
-  .brand-link:hover {
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-
-  .dark .brand-link:hover {
-    filter: drop-shadow(0 4px 6px rgba(255, 255, 255, 0.1));
-    background-color: rgba(255, 255, 255, 0.05);
+    @apply transition-transform duration-500 ease-in-out hover:scale-105;
   }
 
   /* Transición suave entre modo claro y oscuro */
