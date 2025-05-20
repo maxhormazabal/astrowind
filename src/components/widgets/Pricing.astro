@@ -59,7 +59,7 @@ const {
   }
 
   <div class="flex items-stretch justify-center w-full">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 dark:text-white w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 dark:text-white w-full max-w-5xl mx-auto">
       {
         prices &&
           prices.map(
@@ -75,10 +75,10 @@ const {
               hasRibbon = false,
               ribbonTitle,
             }) => (
-              <div class="mx-auto flex w-full intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+              <div class="flex w-full max-w-sm mx-auto intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
                 {/* Usamos period o los nuevos precios para determinar si mostrar la tarjeta */}
                 {(period || priceMonthly || priceYearly) && (
-                  <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10">
+                  <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center transition-all duration-300 hover:shadow-lg hover:scale-105 hover:z-10 mx-auto">
                     {hasRibbon && ribbonTitle && (
                       <div class="absolute right-[-5px] 2xl:right-[-8px] rtl:right-auto rtl:left-[-8px] rtl:2xl:left-[-10px] top-[-5px] 2xl:top-[-10px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
                         <span class="absolute top-[19px] right-[-21px] rtl:right-auto rtl:left-[-21px] block w-full rotate-45 rtl:-rotate-45 bg-green-700 text-center text-[10px] font-bold uppercase leading-5 text-white shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)] before:absolute before:left-0 before:top-full before:z-[-1] before:border-[3px] before:border-r-transparent before:border-b-transparent before:border-l-green-800 before:border-t-green-800 before:content-[''] after:absolute after:right-0 after:top-full after:z-[-1] after:border-[3px] after:border-l-transparent after:border-b-transparent after:border-r-green-800 after:border-t-green-800 after:content-[''] ribbon-badge">
@@ -147,13 +147,13 @@ const {
                                       index >= visibleItems ? 'hidden item-hidden' : 'visible-item'
                                     }`}
                                   >
-                                    <div class="rounded-full bg-primary mt-1">
+                                    <div class="rounded-full bg-primary mt-1 flex-shrink-0">
                                       <Icon
                                         name={icon ? icon : 'tabler:check'}
                                         class="w-5 h-5 font-bold p-1 text-white"
                                       />
                                     </div>
-                                    <span>{description}</span>
+                                    <span class="flex-1">{description}</span>
                                   </li>
                                 )
                             )}
@@ -211,6 +211,14 @@ const {
   @media (max-width: 768px) {
     .pricing-items {
       min-height: auto; /* En móvil permitimos altura natural */
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 85%;
+    }
+
+    .pricing-items li {
+      justify-content: center;
+      text-align: left;
     }
   }
 
@@ -243,6 +251,13 @@ const {
     position: relative;
     height: 5rem;
     width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .pricing-price-container {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
   }
 
   .pricing-amount {
@@ -297,6 +312,20 @@ const {
     transition: all 0.3s ease;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .toggle-items {
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+
+    .dark .toggle-items {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
   }
 
   .toggle-items:hover {
