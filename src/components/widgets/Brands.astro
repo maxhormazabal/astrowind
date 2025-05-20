@@ -25,72 +25,203 @@ const getDarkImageSrc = (src) => {
 };
 ---
 
-<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
 
-  <div class="flex flex-wrap items-center justify-center gap-10 sm:gap-14 md:gap-20 mt-10 max-w-5xl mx-auto px-4">
-    {
-      icons &&
-        icons.map((icon) => (
-          <div class="flex-none flex items-center justify-center h-32 sm:h-36 w-[220px] sm:w-[240px] p-8 mx-auto sm:mx-4 my-4">
-            <Icon name={icon} class="h-auto max-h-24 sm:max-h-28 w-auto text-gray-500" />
-          </div>
-        ))
-    }
-
-    {
-      images &&
-        images.map((image) => {
-          if (!image.src) return null;
-
-          const darkSrc = getDarkImageSrc(image.src);
-
-          const imageComponent = (
-            <div class="flex-none flex items-center justify-center h-32 sm:h-36 w-[220px] sm:w-[240px] p-8 mx-auto sm:mx-4 my-4">
-              {/* Imagen para modo claro */}
-              <Image
-                src={image.src}
-                alt={image.alt || ''}
-                class={`max-h-24 sm:max-h-28 w-auto object-contain transition-transform duration-500 ease-in-out ${image.href ? 'group-hover:scale-110' : ''} dark:hidden`}
-                width={100}
-              />
-
-              {/* Imagen para modo oscuro */}
-              {darkSrc && (
-                <Image
-                  src={darkSrc}
-                  alt={image.alt || ''}
-                  class={`max-h-24 sm:max-h-28 w-auto object-contain transition-transform duration-500 ease-in-out ${image.href ? 'group-hover:scale-110' : ''} hidden dark:block`}
-                  width={100}
-                />
-              )}
-            </div>
-          );
-
-          if (image.href) {
-            return (
-              <a
-                href={image.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="brand-link group"
-                title={`Visitar ${image.alt || 'sitio'}`}
-              >
-                {imageComponent}
-              </a>
-            );
+  <div class="mt-10 mx-auto px-4 overflow-hidden">
+    <div class="logos-carousel-container">
+      <div class="logos-track">
+        {/* Primera copia de logos para el efecto infinito */}
+        <div class="logos-slide">
+          {
+            icons &&
+              icons.map((icon) => (
+                <div class="logo-item">
+                  <Icon name={icon} class="h-auto w-auto text-gray-500" style="width: 150px;" />
+                </div>
+              ))
           }
 
-          return imageComponent;
-        })
-    }
+          {
+            images &&
+              images.map((image) => {
+                if (!image.src) return null;
+                const darkSrc = getDarkImageSrc(image.src);
+
+                const imageComponent = (
+                  <div class="logo-item">
+                    {/* Imagen para modo claro */}
+                    <Image
+                      src={image.src}
+                      alt={image.alt || ''}
+                      class="w-auto object-contain dark:hidden logo-image"
+                      width={180}
+                    />
+
+                    {/* Imagen para modo oscuro */}
+                    {darkSrc && (
+                      <Image
+                        src={darkSrc}
+                        alt={image.alt || ''}
+                        class="w-auto object-contain hidden dark:block logo-image"
+                        width={180}
+                      />
+                    )}
+                  </div>
+                );
+
+                if (image.href) {
+                  return (
+                    <a
+                      href={image.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="brand-link"
+                      title={`Visitar ${image.alt || 'sitio'}`}
+                    >
+                      {imageComponent}
+                    </a>
+                  );
+                }
+
+                return imageComponent;
+              })
+          }
+        </div>
+
+        {/* Segunda copia de logos para el efecto infinito */}
+        <div class="logos-slide">
+          {
+            icons &&
+              icons.map((icon) => (
+                <div class="logo-item">
+                  <Icon name={icon} class="h-auto w-auto text-gray-500" style="width: 150px;" />
+                </div>
+              ))
+          }
+
+          {
+            images &&
+              images.map((image) => {
+                if (!image.src) return null;
+                const darkSrc = getDarkImageSrc(image.src);
+
+                const imageComponent = (
+                  <div class="logo-item">
+                    {/* Imagen para modo claro */}
+                    <Image
+                      src={image.src}
+                      alt={image.alt || ''}
+                      class="w-auto object-contain dark:hidden logo-image"
+                      width={180}
+                    />
+
+                    {/* Imagen para modo oscuro */}
+                    {darkSrc && (
+                      <Image
+                        src={darkSrc}
+                        alt={image.alt || ''}
+                        class="w-auto object-contain hidden dark:block logo-image"
+                        width={180}
+                      />
+                    )}
+                  </div>
+                );
+
+                if (image.href) {
+                  return (
+                    <a
+                      href={image.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="brand-link"
+                      title={`Visitar ${image.alt || 'sitio'}`}
+                    >
+                      {imageComponent}
+                    </a>
+                  );
+                }
+
+                return imageComponent;
+              })
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </WidgetWrapper>
 
 <style>
-  /* Estilo simple solo para enlaces - sin sombras ni bordes */
+  /* Contenedor del carrusel */
+  .logos-carousel-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 30px 0;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+
+  /* Pista infinita */
+  .logos-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+
+  /* Pausa en hover para mejor experiencia de usuario */
+  .logos-track:hover {
+    animation-play-state: paused;
+  }
+
+  /* Slides individuales */
+  .logos-slide {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Elementos individuales */
+  .logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 25px;
+    margin: 0 15px;
+    min-width: 200px;
+    background-color: transparent;
+    transition: transform 0.3s ease;
+  }
+
+  /* Estilo específico para las imágenes del logo */
+  .logo-image {
+    width: auto;
+    max-width: 180px !important;
+    object-fit: contain;
+  }
+
+  /* Efectos para enlaces */
   .brand-link {
-    @apply transition-transform duration-500 ease-in-out hover:scale-105;
+    text-decoration: none;
+    transition: transform 0.5s ease;
+  }
+
+  .brand-link:hover {
+    transform: scale(1.05);
+  }
+
+  .brand-link:hover .logo-item,
+  .logo-item:hover {
+    transform: scale(1.05);
+  }
+
+  /* Animación de desplazamiento infinito */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 
   /* Transición suave entre modo claro y oscuro */
@@ -98,4 +229,63 @@ const getDarkImageSrc = (src) => {
   :global(html:not(.dark)) img {
     transition: opacity 0.5s ease-in-out;
   }
+
+  /* Ajustes responsivos */
+  @media (max-width: 768px) {
+    .logo-item {
+      padding: 12px 15px;
+      min-width: 160px;
+      margin: 0 10px;
+    }
+
+    .logo-image {
+      max-width: 150px !important;
+    }
+
+    /* Más rápido en móviles para mejor experiencia */
+    .logos-track {
+      animation: marquee 30s linear infinite;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-item {
+      padding: 10px;
+      min-width: 140px;
+      margin: 0 8px;
+    }
+
+    .logo-image {
+      max-width: 130px !important;
+    }
+
+    .logos-carousel-container {
+      padding: 10px 0;
+    }
+  }
 </style>
+
+<!-- Script para controlar la animación del carrusel -->
+<script>
+  // Ajustamos la velocidad de la animación dependiendo del número de logos
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.logos-track');
+    if (!track) return;
+
+    const logoItems = track.querySelectorAll('.logo-item');
+    // Ajustar velocidad basado en número de elementos
+    const totalItems = logoItems.length;
+    const speed = Math.max(20, Math.min(60, totalItems * 2)); // Entre 20s y 60s
+
+    (track as HTMLElement).style.animationDuration = `${speed}s`;
+
+    // Pausa y reanudación al pasar el cursor
+    track.addEventListener('mouseenter', () => {
+      (track as HTMLElement).style.animationPlayState = 'paused';
+    });
+
+    track.addEventListener('mouseleave', () => {
+      (track as HTMLElement).style.animationPlayState = 'running';
+    });
+  });
+</script>
