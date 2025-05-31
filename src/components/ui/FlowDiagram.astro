@@ -60,8 +60,6 @@ const serializedProps = JSON.stringify({ radius, width, height });
     const cy = height / 2;
 
     // Box dimensions proportional to effective radius
-    const boxWidth = Math.min(effectiveRadius * 1.2, 160); // 120% of radius, max 160px
-    const boxHeight = Math.min(effectiveRadius * 0.8, 100); // 80% of radius, max 100px
     const boxPadding = 20;
 
     // Calculate angle step
@@ -99,6 +97,60 @@ const serializedProps = JSON.stringify({ radius, width, height });
       .attr('stroke', primaryColor)
       .attr('stroke-width', effectiveRadius * 0.1) // 10% of radius
       .attr('opacity', 0.3);
+
+    // Calculate dimensions for all cards first
+    const calculateTextDimensions = (text, maxCharsPerLine = 25) => {
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      words.forEach((word) => {
+        if ((currentLine + ' ' + word).length <= maxCharsPerLine) {
+          currentLine = currentLine ? `${currentLine} ${word}` : word;
+        } else {
+          if (currentLine) lines.push(currentLine);
+          currentLine = word;
+        }
+      });
+      if (currentLine) lines.push(currentLine);
+
+      return {
+        lines,
+        lineCount: lines.length,
+        maxLineWidth: Math.max(...lines.map((line) => line.length)),
+      };
+    };
+
+    // Calculate maximum dimensions needed for all cards
+    const cardDimensions = items.map((item) => {
+      const taglineDims = calculateTextDimensions(item.cardTagline);
+      const titleDims = calculateTextDimensions(item.cardTitle);
+      return {
+        width: Math.max(taglineDims.maxLineWidth * 8, titleDims.maxLineWidth * 8, effectiveRadius * 0.8),
+        height: Math.max(
+          taglineDims.lineCount * 20 + // tagline height
+            60 + // fixed space for step number and title
+            40, // padding
+          effectiveRadius * 0.6
+        ),
+      };
+    });
+
+    // Use the maximum dimensions for all cards
+    const boxWidth = Math.min(Math.max(...cardDimensions.map((d) => d.width)) + boxPadding * 2, effectiveRadius * 1.2);
+    const boxHeight = Math.min(
+      Math.max(...cardDimensions.map((d) => d.height)) + boxPadding * 2,
+      effectiveRadius * 0.8
+    );
+
+    // Calculate text dimensions for centering
+    const textWidth = boxWidth - boxPadding * 2;
+    const textAreaHeight = boxHeight - boxPadding * 2;
+
+    // Make text sizes proportional to available text area
+    const stepNumberHeight = Math.max(textAreaHeight * 0.12, 12);
+    const titleHeight = Math.max(textAreaHeight * 0.14, 14);
+    const taglineHeight = Math.max(textAreaHeight * 0.14, 14);
 
     // Create and position the items
     items.forEach((item, index) => {
@@ -163,20 +215,13 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('class', 'text-wrapper')
         .attr('transform', `translate(${boxPadding}, 0)`);
 
-      // Calculate text dimensions for centering
-      const textWidth = boxWidth - boxPadding * 2;
-      const textAreaHeight = boxHeight - boxPadding * 2;
+      // Split tagline into lines
+      const taglineLines = calculateTextDimensions(item.cardTagline).lines;
+      const totalTextHeight = stepNumberHeight + titleHeight + taglineLines.length * (taglineHeight + 2) + 12; // spacing
 
-      // Make text sizes proportional to available text area
-      const stepNumberHeight = Math.max(textAreaHeight * 0.12, 12);
-      const titleHeight = Math.max(textAreaHeight * 0.14, 14);
-      const taglineHeight = Math.max(textAreaHeight * 0.14, 14);
-      const totalTextHeight = stepNumberHeight + taglineHeight + titleHeight + 12;
-
-      // Center vertically within the padded area
       const startY = boxPadding + (textAreaHeight - totalTextHeight) / 2;
 
-      // Add step number with consistent sizing
+      // Add step number
       textWrapper
         .append('text')
         .attr('y', startY)
@@ -190,7 +235,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('class', 'step-number')
         .text(`Step ${index + 1}`);
 
-      // Add title (smaller and above tagline)
+      // Add title
       textWrapper
         .append('text')
         .attr('y', startY + stepNumberHeight + 4)
@@ -202,21 +247,25 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('font-weight', '500')
         .attr('fill', primaryColor)
         .attr('class', 'title')
-        .text(item.cardTagline);
-
-      // Add tagline (larger and below title)
-      textWrapper
-        .append('text')
-        .attr('y', startY + stepNumberHeight + titleHeight + 8)
-        .attr('x', textWidth / 2)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'hanging')
-        .attr('font-family', 'var(--aw-font-heading)')
-        .attr('font-size', `${taglineHeight}px`)
-        .attr('font-weight', '300')
-        .attr('fill', textColor)
-        .attr('class', 'tagline')
         .text(item.cardTitle);
+
+      // Add tagline with multiple lines
+      const taglineGroup = textWrapper.append('g').attr('class', 'tagline-group');
+
+      taglineLines.forEach((line, lineIndex) => {
+        taglineGroup
+          .append('text')
+          .attr('y', startY + stepNumberHeight + titleHeight + 8 + lineIndex * (taglineHeight + 2))
+          .attr('x', textWidth / 2)
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'hanging')
+          .attr('font-family', 'var(--aw-font-heading)')
+          .attr('font-size', `${taglineHeight}px`)
+          .attr('font-weight', '300')
+          .attr('fill', textColor)
+          .attr('class', 'tagline')
+          .text(line);
+      });
     });
 
     // Add hover effects
