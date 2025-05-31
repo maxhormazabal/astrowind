@@ -8,6 +8,9 @@ const metadata: MetaData = {
   title: 'Herramientas Corporativas',
   description: 'Recursos y herramientas para el equipo',
 };
+
+// Opciones de ancho predefinidas para el PNG
+const widthOptions = [256, 512, 1024, 2048];
 ---
 
 <PageLayout metadata={metadata}>
@@ -48,41 +51,129 @@ const metadata: MetaData = {
               <h3 class="text-xl font-bold ml-4 text-white">Logo Corporativo</h3>
             </div>
 
-            <p class="mt-4 text-slate-300">Descarga el logo oficial de la empresa en formato SVG.</p>
+            <p class="mt-4 text-slate-300">Descarga el logo oficial de la empresa en formato SVG o PNG.</p>
 
-            <div class="mt-6 flex justify-center">
+            <div class="mt-6 flex justify-center" id="logo-container">
               <Image
                 src={logoImage}
                 alt="Logo de la empresa"
                 width={192}
                 height={192}
                 class="object-contain mb-6 bg-white/5 rounded-lg p-4"
+                id="logo-image"
               />
             </div>
 
-            <a
-              href={logoImage.src}
-              download="logo.svg"
-              class="w-full flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5 mr-2"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
+            <div class="flex flex-col gap-3">
+              <a
+                href={logoImage.src}
+                download="logo.svg"
+                class="w-full flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                <path d="M7 11l5 5l5 -5"></path>
-                <path d="M12 4l0 12"></path>
-              </svg>
-              Descargar Logo SVG
-            </a>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                  <path d="M7 11l5 5l5 -5"></path>
+                  <path d="M12 4l0 12"></path>
+                </svg>
+                Descargar Logo SVG
+              </a>
+
+              <div class="flex flex-col gap-2">
+                <label for="png-width" class="text-sm text-slate-300">Ancho del PNG (px):</label>
+                <select
+                  id="png-width"
+                  class="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:border-blue-500"
+                >
+                  {widthOptions.map((width) => <option value={width}>{width}px</option>)}
+                </select>
+              </div>
+
+              <button
+                id="download-png"
+                class="w-full flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                  <path d="M7 11l5 5l5 -5"></path>
+                  <path d="M12 4l0 12"></path>
+                </svg>
+                Descargar Logo PNG
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 </PageLayout>
+
+<script>
+  const downloadPNG = async () => {
+    const logoContainer = document.getElementById('logo-container');
+    const logoImage = document.querySelector('#logo-image') as HTMLImageElement;
+    const widthSelect = document.querySelector('#png-width') as HTMLSelectElement;
+
+    if (!logoContainer || !logoImage || !widthSelect) return;
+
+    // Get desired width and calculate height to maintain aspect ratio
+    const targetWidth = parseInt(widthSelect.value);
+    const aspectRatio = logoImage.naturalHeight / logoImage.naturalWidth;
+    const targetHeight = Math.round(targetWidth * aspectRatio);
+
+    // Create a canvas with a higher pixel density (2x)
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size to 2x the target size for better quality
+    canvas.width = targetWidth * 2;
+    canvas.height = targetHeight * 2;
+
+    // Enable high-quality image scaling
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Create a temporary image to load the SVG
+    const img = new Image();
+    img.src = logoImage.src;
+
+    // Wait for the image to load
+    await new Promise((resolve) => {
+      img.onload = resolve;
+    });
+
+    // Clear the canvas and draw the image at 2x size
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to high-quality PNG
+    const pngData = canvas.toDataURL('image/png', 1.0);
+
+    // Trigger download with size in filename
+    const downloadLink = document.createElement('a');
+    downloadLink.href = pngData;
+    downloadLink.download = `logo-${targetWidth}x${targetHeight}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
+  // Add click event listener to the PNG download button
+  document.getElementById('download-png')?.addEventListener('click', downloadPNG);
+</script>
