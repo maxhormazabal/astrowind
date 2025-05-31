@@ -32,12 +32,10 @@ const serializedProps = JSON.stringify({ radius, width, height });
 </div>
 
 <script define:vars={{ serializedItems, serializedProps, startAngle }}>
-  // Ensure we only run this once the DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     const items = JSON.parse(serializedItems);
     const { radius, width, height } = JSON.parse(serializedProps);
 
-    // Don't proceed if no items
     if (!items || items.length === 0) return;
 
     // Get CSS variables for colors
@@ -49,15 +47,28 @@ const serializedProps = JSON.stringify({ radius, width, height });
     const bgColor = style.getPropertyValue('--aw-color-bg-page').trim();
     const bgDarkColor = style.getPropertyValue('--aw-color-bg-page-dark').trim();
 
-    // Center of our SVG
+    // Calculate dimensions with safety margins
+    const margin = width * 0.15; // 15% margin for safety
+    const effectiveWidth = width - margin * 2;
+    const effectiveHeight = height - margin * 2;
+
+    // Calculate the effective radius to ensure boxes fit
+    const effectiveRadius = Math.min(radius, effectiveWidth * 0.35); // 35% of effective width
+
+    // Center points including margin
     const cx = width / 2;
     const cy = height / 2;
+
+    // Box dimensions proportional to effective radius
+    const boxWidth = Math.min(effectiveRadius * 1.2, 160); // 120% of radius, max 160px
+    const boxHeight = Math.min(effectiveRadius * 0.8, 100); // 80% of radius, max 100px
+    const boxPadding = 12;
 
     // Calculate angle step
     const angleStep = (2 * Math.PI) / items.length;
     const startRad = (startAngle * Math.PI) / 180;
 
-    // Create SVG element with responsive viewBox
+    // Create SVG element
     const svg = d3
       .select('#flow-diagram-root')
       .append('svg')
@@ -83,32 +94,32 @@ const serializedProps = JSON.stringify({ radius, width, height });
       .append('circle')
       .attr('cx', cx)
       .attr('cy', cy)
-      .attr('r', radius)
+      .attr('r', effectiveRadius)
       .attr('fill', 'none')
       .attr('stroke', primaryColor)
-      .attr('stroke-width', 15)
+      .attr('stroke-width', effectiveRadius * 0.1) // 10% of radius
       .attr('opacity', 0.3);
 
     // Create and position the items
     items.forEach((item, index) => {
       const angle = startRad + index * angleStep;
-      const nodeX = cx + radius * Math.cos(angle);
-      const nodeY = cy + radius * Math.sin(angle);
+      const nodeX = cx + effectiveRadius * Math.cos(angle);
+      const nodeY = cy + effectiveRadius * Math.sin(angle);
 
       // Add connection dot
       svg
         .append('circle')
         .attr('cx', nodeX)
         .attr('cy', nodeY)
-        .attr('r', 5)
+        .attr('r', effectiveRadius * 0.03) // 3% of radius
         .attr('fill', primaryColor)
         .attr('opacity', 0.8)
         .attr('class', `connector-dot connector-${index}`);
 
       // Calculate callout position
-      const calloutDistance = radius * 0.3;
-      const calloutX = cx + (radius + calloutDistance) * Math.cos(angle);
-      const calloutY = cy + (radius + calloutDistance) * Math.sin(angle);
+      const calloutDistance = effectiveRadius * 0.4; // 40% of radius
+      const calloutX = cx + (effectiveRadius + calloutDistance) * Math.cos(angle);
+      const calloutY = cy + (effectiveRadius + calloutDistance) * Math.sin(angle);
 
       // Add connector line
       svg
@@ -118,19 +129,14 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('x2', calloutX)
         .attr('y2', calloutY)
         .attr('stroke', primaryColor)
-        .attr('stroke-width', 2)
+        .attr('stroke-width', effectiveRadius * 0.01) // 1% of radius
         .attr('opacity', 0.7)
         .attr('class', `connector-line connector-${index}`);
-
-      // Create text box
-      const boxWidth = Math.min(width * 0.3, 180);
-      const boxHeight = Math.min(height * 0.25, 120);
-      const boxPadding = 12;
 
       // Calculate box position
       const ux = Math.cos(angle);
       const uy = Math.sin(angle);
-      const nudge = Math.sqrt((boxWidth / 2) ** 2 + (boxHeight / 2) ** 2) * 0.7;
+      const nudge = effectiveRadius * 0.2; // 20% of radius
 
       const group = svg
         .append('g')
@@ -194,7 +200,10 @@ const serializedProps = JSON.stringify({ radius, width, height });
         return this.getAttribute('transform').split(' scale')[0];
       });
 
-      svg.selectAll('.connector-dot').attr('r', 5).attr('opacity', 0.8);
+      svg
+        .selectAll('.connector-dot')
+        .attr('r', effectiveRadius * 0.03)
+        .attr('opacity', 0.8);
       svg.selectAll('.connector-line').attr('opacity', 0.7);
 
       // Highlight selected item
@@ -212,7 +221,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .filter('.connector-dot')
         .transition()
         .duration(200)
-        .attr('r', 7)
+        .attr('r', effectiveRadius * 0.04)
         .attr('opacity', 1);
 
       svg.selectAll(`.connector-${index}`).filter('.connector-line').transition().duration(200).attr('opacity', 1);
