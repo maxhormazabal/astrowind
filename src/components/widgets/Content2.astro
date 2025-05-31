@@ -3,6 +3,7 @@ import type { Content } from '~/types';
 import Headline from '~/components/ui/Headline.astro';
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import FlowDiagram from '~/components/ui/FlowDiagram.astro';
+import type { FlowItem } from '~/components/ui/FlowDiagram.astro';
 
 interface Props extends Content {}
 
@@ -19,6 +20,12 @@ const {
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
+
+// Transform items for the FlowDiagram ensuring they match the FlowItem interface
+const flowItems: FlowItem[] = items.map(({ title: itemTitle, description }) => ({
+  title: itemTitle || '',
+  description: description || '',
+}));
 ---
 
 <WidgetWrapper
@@ -59,9 +66,9 @@ const {
           )
         }
       </div>
-      <div aria-hidden="true" class="mt-10 md:mt-0 md:basis-1/2">
-        <FlowDiagram />
+      <div class="md:basis-1/2 flex justify-center items-center min-h-[500px] mt-8 md:mt-0">
+        <FlowDiagram items={flowItems} width={500} radius={180} startAngle={-90} />
       </div>
     </div>
   </div>
-</WidgetWrapper>;
+</WidgetWrapper>
