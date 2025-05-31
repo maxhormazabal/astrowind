@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import isologoImage from '../../assets/tools/logos/iso.svg';
+import isologoImage from '~/assets/tools/logos/iso.svg';
 
 interface Props {
   class?: string;
@@ -13,9 +13,10 @@ interface ColorOption {
 }
 
 // Opciones de ancho predefinidas para el PNG
-const widthOptions = [256, 512, 1024, 2048] as const;
+const widthOptions = [256, 512, 1024, 2048];
 
 const logoColorOptions: ColorOption[] = [
+  { value: '#f9f9f9', label: 'Blanco' },
   { value: '#1E2828', label: 'Negro' },
   { value: '#1C4B49', label: 'Verde Oscuro' },
   { value: '#1A6D69', label: 'Verde' },
@@ -24,7 +25,7 @@ const logoColorOptions: ColorOption[] = [
   { value: '#A6DBDC', label: 'Verde Claro' },
   { value: '#D6EEEF', label: 'Verde Muy Claro' },
   { value: '#E6F4F4', label: 'Verde Pálido' },
-] as const;
+];
 
 const { class: className } = Astro.props;
 ---
@@ -51,14 +52,14 @@ const { class: className } = Astro.props;
   <p class="mt-4 text-slate-300">Descarga el isologo oficial de la empresa en formato SVG o PNG.</p>
 
   <div class="mt-6 flex justify-center">
-    <div id="preview-container" class="relative w-48 h-48 rounded-lg p-4 transition-colors duration-300 bg-white/5">
-      <img
-        src={isologoImage.src}
+    <div id="iso-preview-container" class="relative w-48 h-48 rounded-lg p-4 transition-colors duration-300 bg-white/5">
+      <Image
+        src={isologoImage}
         alt="Isologo de la empresa"
-        width="192"
-        height="192"
+        width={192}
+        height={192}
         class="object-contain"
-        id="preview-image"
+        id="iso-preview-image"
       />
     </div>
   </div>
@@ -66,14 +67,14 @@ const { class: className } = Astro.props;
   <!-- Color Selection -->
   <div class="space-y-4 mb-6">
     <div>
-      <label for="logoColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Logo</label>
-      <select id="logoColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+      <label for="iso-logoColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Logo</label>
+      <select id="iso-logoColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
         {logoColorOptions.map((option) => <option value={option.value}>{option.label}</option>)}
       </select>
     </div>
     <div>
-      <label for="pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho del PNG (px)</label>
-      <select id="pngWidth" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+      <label for="iso-pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho del PNG (px)</label>
+      <select id="iso-pngWidth" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
         {widthOptions.map((width) => <option value={width}>{width}px</option>)}
       </select>
     </div>
@@ -102,7 +103,7 @@ const { class: className } = Astro.props;
     </a>
 
     <button
-      id="downloadPng"
+      id="iso-downloadPng"
       data-logo-url={isologoImage.src}
       class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
     >
@@ -170,10 +171,10 @@ const { class: className } = Astro.props;
 
   // Set up event listeners
   document.addEventListener('DOMContentLoaded', () => {
-    const downloadPngButton = document.getElementById('downloadPng');
-    const logoColorSelect = document.getElementById('logoColor') as HTMLSelectElement;
-    const pngWidthSelect = document.getElementById('pngWidth') as HTMLSelectElement;
-    const previewContainer = document.getElementById('preview-container');
+    const downloadPngButton = document.getElementById('iso-downloadPng');
+    const logoColorSelect = document.getElementById('iso-logoColor') as HTMLSelectElement;
+    const pngWidthSelect = document.getElementById('iso-pngWidth') as HTMLSelectElement;
+    const previewContainer = document.getElementById('iso-preview-container');
 
     if (!downloadPngButton || !logoColorSelect || !pngWidthSelect || !previewContainer) {
       console.error('Required elements not found');
@@ -224,12 +225,16 @@ const { class: className } = Astro.props;
           previewSvg.style.width = '100%';
           previewSvg.style.height = '100%';
         }
+
+        // Update preview container background based on logo color
+        const isLogoWhite = logoColorSelect.value === '#f9f9f9';
+        previewContainer.style.backgroundColor = isLogoWhite ? 'rgba(255, 255, 255, 0.05)' : 'rgb(255, 255, 255)';
       } catch (error) {
         console.error('Error updating preview:', error);
       }
     };
 
-    // Add event listeners for color changes
+    // Update preview when colors change
     logoColorSelect.addEventListener('change', updatePreview);
 
     // Initial preview update
@@ -238,22 +243,24 @@ const { class: className } = Astro.props;
     // Handle PNG download
     downloadPngButton.addEventListener('click', async () => {
       try {
+        const width = parseInt(pngWidthSelect.value);
         const svgElement = previewContainer.querySelector('svg');
+
         if (!svgElement) {
           throw new Error('SVG element not found');
         }
 
-        // Convert to PNG
-        const width = parseInt(pngWidthSelect.value);
         const pngDataUrl = await convertSvgToPng(svgElement, width);
 
-        // Create download link
+        // Create temporary link and trigger download
         const link = document.createElement('a');
-        link.download = 'isologo.png';
+        link.download = `isologo_${width}px.png`;
         link.href = pngDataUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       } catch (error) {
-        console.error('Error generating PNG:', error);
+        console.error('Error downloading PNG:', error);
       }
     });
   });

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import logoImage from '~/assets/tools/logos/logo_completo.svg';
+import entireLogoImage from '~/assets/tools/logos/logo_completo.svg';
 
 interface Props {
   class?: string;
@@ -51,20 +51,23 @@ const { class: className } = Astro.props;
       <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5"></path>
       <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3"></path>
     </svg>
-    <h3 class="text-xl font-bold ml-4 text-white">Logo Corporativo</h3>
+    <h3 class="text-xl font-bold ml-4 text-white">Logo Completo</h3>
   </div>
 
-  <p class="mt-4 text-slate-300">Descarga el logo oficial de la empresa en formato SVG o PNG.</p>
+  <p class="mt-4 text-slate-300">Descarga el logo completo oficial de la empresa en formato SVG o PNG.</p>
 
   <div class="mt-6 flex justify-center">
-    <div id="preview-container" class="relative w-48 h-48 rounded-lg p-4 transition-colors duration-300 bg-white/5">
+    <div
+      id="entire-preview-container"
+      class="relative w-48 h-48 rounded-lg p-4 transition-colors duration-300 bg-white/5"
+    >
       <Image
-        src={logoImage}
-        alt="Logo de la empresa"
+        src={entireLogoImage}
+        alt="Logo completo de la empresa"
         width={192}
         height={192}
         class="object-contain"
-        id="preview-image"
+        id="entire-preview-image"
       />
     </div>
   </div>
@@ -72,20 +75,20 @@ const { class: className } = Astro.props;
   <!-- Color Selection -->
   <div class="space-y-4 mb-6">
     <div>
-      <label for="textColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Texto</label>
-      <select id="textColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+      <label for="entire-textColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Texto</label>
+      <select id="entire-textColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
         {textColorOptions.map((option) => <option value={option.value}>{option.label}</option>)}
       </select>
     </div>
     <div>
-      <label for="logoColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Logo</label>
-      <select id="logoColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+      <label for="entire-logoColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Logo</label>
+      <select id="entire-logoColor" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
         {logoColorOptions.map((option) => <option value={option.value}>{option.label}</option>)}
       </select>
     </div>
     <div>
-      <label for="pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho del PNG (px)</label>
-      <select id="pngWidth" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+      <label for="entire-pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho del PNG (px)</label>
+      <select id="entire-pngWidth" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
         {widthOptions.map((width) => <option value={width}>{width}px</option>)}
       </select>
     </div>
@@ -93,8 +96,8 @@ const { class: className } = Astro.props;
 
   <div class="flex flex-col space-y-4 mt-auto">
     <a
-      href={logoImage.src}
-      download="logo.svg"
+      href={entireLogoImage.src}
+      download="logo_completo.svg"
       class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
     >
       <svg
@@ -114,8 +117,8 @@ const { class: className } = Astro.props;
     </a>
 
     <button
-      id="downloadPng"
-      data-logo-url={logoImage.src}
+      id="entire-downloadPng"
+      data-logo-url={entireLogoImage.src}
       class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
     >
       <svg
@@ -182,11 +185,11 @@ const { class: className } = Astro.props;
 
   // Set up event listeners
   document.addEventListener('DOMContentLoaded', () => {
-    const downloadPngButton = document.getElementById('downloadPng');
-    const textColorSelect = document.getElementById('textColor') as HTMLSelectElement;
-    const logoColorSelect = document.getElementById('logoColor') as HTMLSelectElement;
-    const pngWidthSelect = document.getElementById('pngWidth') as HTMLSelectElement;
-    const previewContainer = document.getElementById('preview-container');
+    const downloadPngButton = document.getElementById('entire-downloadPng');
+    const textColorSelect = document.getElementById('entire-textColor') as HTMLSelectElement;
+    const logoColorSelect = document.getElementById('entire-logoColor') as HTMLSelectElement;
+    const pngWidthSelect = document.getElementById('entire-pngWidth') as HTMLSelectElement;
+    const previewContainer = document.getElementById('entire-preview-container');
 
     if (!downloadPngButton || !textColorSelect || !logoColorSelect || !pngWidthSelect || !previewContainer) {
       console.error('Required elements not found');
@@ -252,7 +255,7 @@ const { class: className } = Astro.props;
       }
     };
 
-    // Add event listeners for color changes
+    // Update preview when colors change
     textColorSelect.addEventListener('change', updatePreview);
     logoColorSelect.addEventListener('change', updatePreview);
 
@@ -262,22 +265,24 @@ const { class: className } = Astro.props;
     // Handle PNG download
     downloadPngButton.addEventListener('click', async () => {
       try {
+        const width = parseInt(pngWidthSelect.value);
         const svgElement = previewContainer.querySelector('svg');
+
         if (!svgElement) {
           throw new Error('SVG element not found');
         }
 
-        // Convert to PNG
-        const width = parseInt(pngWidthSelect.value);
         const pngDataUrl = await convertSvgToPng(svgElement, width);
 
-        // Create download link
+        // Create temporary link and trigger download
         const link = document.createElement('a');
-        link.download = 'logo.png';
+        link.download = `logo_completo_${width}px.png`;
         link.href = pngDataUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       } catch (error) {
-        console.error('Error generating PNG:', error);
+        console.error('Error downloading PNG:', error);
       }
     });
   });

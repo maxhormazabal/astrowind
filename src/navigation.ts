@@ -131,7 +131,7 @@ export const footerData = {
     {
       title: 'Contact Us',
       links: [
-        { text: 'info@dokken.com', href: 'mailto:info@dokken.com' },
+        { text: 'info@dokken.com', href: 'mailto:info@dokken.ai' },
         { text: 'Estrada do Vilar, 56, Lavadores,<br />36214 Vigo, Pontevedra', href: 'https://maps.app.goo.gl/vRtFFkc3gcxQM78w5' },
       ],
     },
