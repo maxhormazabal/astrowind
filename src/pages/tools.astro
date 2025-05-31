@@ -11,6 +11,26 @@ const metadata: MetaData = {
 
 // Opciones de ancho predefinidas para el PNG
 const widthOptions = [256, 512, 1024, 2048];
+
+// Colores predeterminados y opciones
+const textColorOptions = [
+  { value: '#f9f9f9', label: 'Blanco' },
+  { value: '#1E2828', label: 'Negro' },
+];
+
+const logoColorOptions = [
+  { value: '#1E2828', label: 'Negro' },
+  { value: '#1C4B49', label: 'Verde Oscuro' },
+  { value: '#1A6D69', label: 'Verde' },
+  { value: '#57A09F', label: 'Verde Medio' },
+  { value: '#93D3D4', label: 'Verde Agua' },
+  { value: '#A6DBDC', label: 'Verde Claro' },
+  { value: '#D6EEEF', label: 'Verde Muy Claro' },
+  { value: '#E6F4F4', label: 'Verde Pálido' },
+];
+
+const defaultTextColor = '#f9f9f9';
+const defaultLogoColor = '#b1dbea';
 ---
 
 <PageLayout metadata={metadata}>
@@ -53,52 +73,58 @@ const widthOptions = [256, 512, 1024, 2048];
 
             <p class="mt-4 text-slate-300">Descarga el logo oficial de la empresa en formato SVG o PNG.</p>
 
-            <div class="mt-6 flex justify-center" id="logo-container">
-              <Image
-                src={logoImage}
-                alt="Logo de la empresa"
-                width={192}
-                height={192}
-                class="object-contain mb-6 bg-white/5 rounded-lg p-4"
-                id="logo-image"
-              />
+            <div class="mt-6 flex justify-center">
+              <div
+                id="preview-container"
+                class="relative w-48 h-48 rounded-lg p-4 transition-colors duration-300 bg-white/5"
+              >
+                <Image
+                  src={logoImage}
+                  alt="Logo de la empresa"
+                  width={192}
+                  height={192}
+                  class="object-contain"
+                  id="preview-image"
+                />
+              </div>
             </div>
 
-            <div class="flex flex-col gap-3">
-              <a
-                href={logoImage.src}
-                download="logo.svg"
-                class="w-full flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 mr-2"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  fill="none"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                  <path d="M7 11l5 5l5 -5"></path>
-                  <path d="M12 4l0 12"></path>
-                </svg>
-                Descargar Logo SVG
-              </a>
-
-              <div class="flex flex-col gap-2">
-                <label for="png-width" class="text-sm text-slate-300">Ancho del PNG (px):</label>
+            <!-- Color Selection -->
+            <div class="space-y-4 mb-6">
+              <div>
+                <label for="textColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Texto</label>
                 <select
-                  id="png-width"
-                  class="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:border-blue-500"
+                  id="textColor"
+                  class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600"
+                >
+                  {textColorOptions.map((option) => <option value={option.value}>{option.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label for="logoColor" class="block text-sm font-medium text-slate-300 mb-2">Color del Logo</label>
+                <select
+                  id="logoColor"
+                  class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600"
+                >
+                  {logoColorOptions.map((option) => <option value={option.value}>{option.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label for="pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho del PNG (px)</label>
+                <select
+                  id="pngWidth"
+                  class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600"
                 >
                   {widthOptions.map((width) => <option value={width}>{width}px</option>)}
                 </select>
               </div>
+            </div>
 
-              <button
-                id="download-png"
-                class="w-full flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+            <div class="flex flex-col space-y-4 mt-auto">
+              <a
+                href={logoImage.src}
+                download="logo.svg"
+                class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +139,28 @@ const widthOptions = [256, 512, 1024, 2048];
                   <path d="M7 11l5 5l5 -5"></path>
                   <path d="M12 4l0 12"></path>
                 </svg>
-                Descargar Logo PNG
+                Descargar SVG
+              </a>
+
+              <button
+                id="downloadPng"
+                data-logo-url={logoImage.src}
+                class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                  <path d="M7 11l5 5l5 -5"></path>
+                  <path d="M12 4l0 12"></path>
+                </svg>
+                Descargar PNG
               </button>
             </div>
           </div>
@@ -124,56 +171,148 @@ const widthOptions = [256, 512, 1024, 2048];
 </PageLayout>
 
 <script>
-  const downloadPNG = async () => {
-    const logoContainer = document.getElementById('logo-container');
-    const logoImage = document.querySelector('#logo-image') as HTMLImageElement;
-    const widthSelect = document.querySelector('#png-width') as HTMLSelectElement;
+  function convertSvgToPng(svgElement: SVGElement, width: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
 
-    if (!logoContainer || !logoImage || !widthSelect) return;
+      // Calculate height maintaining aspect ratio
+      const svg = svgElement as SVGSVGElement;
+      const aspectRatio = svg.viewBox.baseVal.height / svg.viewBox.baseVal.width;
+      const height = width * aspectRatio;
 
-    // Get desired width and calculate height to maintain aspect ratio
-    const targetWidth = parseInt(widthSelect.value);
-    const aspectRatio = logoImage.naturalHeight / logoImage.naturalWidth;
-    const targetHeight = Math.round(targetWidth * aspectRatio);
+      // Set canvas size with higher pixel density for better quality
+      const scale = 2; // 2x pixel density
+      canvas.width = width * scale;
+      canvas.height = height * scale;
 
-    // Create a canvas with a higher pixel density (2x)
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+      if (!ctx) {
+        reject(new Error('Could not get canvas context'));
+        return;
+      }
 
-    // Set canvas size to 2x the target size for better quality
-    canvas.width = targetWidth * 2;
-    canvas.height = targetHeight * 2;
+      // Scale the context to match the higher pixel density
+      ctx.scale(scale, scale);
 
-    // Enable high-quality image scaling
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+      const svgBlob = new Blob([svgElement.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(svgBlob);
 
-    // Create a temporary image to load the SVG
-    const img = new Image();
-    img.src = logoImage.src;
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(blobURL);
+        resolve(canvas.toDataURL('image/png'));
+      };
 
-    // Wait for the image to load
-    await new Promise((resolve) => {
-      img.onload = resolve;
+      img.onerror = () => {
+        URL.revokeObjectURL(blobURL);
+        reject(new Error('Error loading SVG'));
+      };
+
+      img.src = blobURL;
     });
+  }
 
-    // Clear the canvas and draw the image at 2x size
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  // Set up event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const downloadPngButton = document.getElementById('downloadPng');
+    const textColorSelect = document.getElementById('textColor') as HTMLSelectElement;
+    const logoColorSelect = document.getElementById('logoColor') as HTMLSelectElement;
+    const pngWidthSelect = document.getElementById('pngWidth') as HTMLSelectElement;
+    const previewContainer = document.getElementById('preview-container');
 
-    // Convert canvas to high-quality PNG
-    const pngData = canvas.toDataURL('image/png', 1.0);
+    if (!downloadPngButton || !textColorSelect || !logoColorSelect || !pngWidthSelect || !previewContainer) {
+      console.error('Required elements not found');
+      return;
+    }
 
-    // Trigger download with size in filename
-    const downloadLink = document.createElement('a');
-    downloadLink.href = pngData;
-    downloadLink.download = `logo-${targetWidth}x${targetHeight}.png`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
+    const logoUrl = downloadPngButton.getAttribute('data-logo-url');
+    if (!logoUrl) {
+      console.error('Logo URL not found');
+      return;
+    }
 
-  // Add click event listener to the PNG download button
-  document.getElementById('download-png')?.addEventListener('click', downloadPNG);
+    // Function to update SVG colors
+    const updateSvgColors = (svgElement: SVGElement) => {
+      const textElements = svgElement.getElementsByClassName('text-part');
+      const logoElements = svgElement.getElementsByClassName('logo-part');
+
+      // Update text color
+      Array.from(textElements).forEach((element) => {
+        (element as SVGElement).style.fill = textColorSelect.value;
+      });
+
+      // Update logo color
+      Array.from(logoElements).forEach((element) => {
+        (element as SVGElement).style.fill = logoColorSelect.value;
+      });
+    };
+
+    // Function to update preview
+    const updatePreview = async () => {
+      try {
+        // Fetch the SVG
+        const response = await fetch(logoUrl);
+        const svgText = await response.text();
+
+        // Create a temporary container for the SVG
+        const container = document.createElement('div');
+        container.innerHTML = svgText;
+        const svgElement = container.querySelector('svg');
+
+        if (!svgElement) {
+          throw new Error('SVG element not found');
+        }
+
+        // Update colors
+        updateSvgColors(svgElement);
+
+        // Update the preview container with the modified SVG
+        previewContainer.innerHTML = svgElement.outerHTML;
+
+        // Adjust the SVG to fit the container
+        const previewSvg = previewContainer.querySelector('svg');
+        if (previewSvg) {
+          previewSvg.style.width = '100%';
+          previewSvg.style.height = '100%';
+        }
+
+        // Update preview container background based on text color
+        const isTextDark = textColorSelect.value === '#1E2828';
+        previewContainer.style.backgroundColor = isTextDark ? 'rgb(255, 255, 255)' : 'rgba(255, 255, 255, 0.05)';
+      } catch (error) {
+        console.error('Error updating preview:', error);
+      }
+    };
+
+    // Add event listeners for color changes
+    textColorSelect.addEventListener('change', updatePreview);
+    logoColorSelect.addEventListener('change', updatePreview);
+
+    // Initial preview update
+    updatePreview();
+
+    // Handle PNG download
+    downloadPngButton.addEventListener('click', async () => {
+      try {
+        const svgElement = previewContainer.querySelector('svg');
+        if (!svgElement) {
+          throw new Error('SVG element not found');
+        }
+
+        // Convert to PNG
+        const width = parseInt(pngWidthSelect.value);
+        const pngDataUrl = await convertSvgToPng(svgElement, width);
+
+        // Create download link
+        const link = document.createElement('a');
+        link.download = 'logo.png';
+        link.href = pngDataUrl;
+        link.click();
+      } catch (error) {
+        console.error('Error generating PNG:', error);
+      }
+    });
+  });
 </script>
