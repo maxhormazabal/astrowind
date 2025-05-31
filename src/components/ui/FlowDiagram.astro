@@ -1,0 +1,109 @@
+<div class="flow-diagram-container">
+  <div class="flow-items">
+    <!-- Extract Box -->
+    <div class="flow-item">
+      <div class="flow-box">
+        <h3 class="text-2xl font-bold mb-2">Extract</h3>
+        <p class="text-gray-600 dark:text-gray-300">Meaningful information from unstructured data</p>
+      </div>
+    </div>
+
+    <!-- Export Box -->
+    <div class="flow-item">
+      <div class="flow-box">
+        <h3 class="text-2xl font-bold mb-2">Export</h3>
+        <p class="text-gray-600 dark:text-gray-300">Present the right data into your ERP, CRM or ITool</p>
+      </div>
+    </div>
+
+    <!-- Automate Box -->
+    <div class="flow-item">
+      <div class="flow-box">
+        <h3 class="text-2xl font-bold mb-2">Automate</h3>
+        <p class="text-gray-600 dark:text-gray-300">Automate your business process, applying rules and validations</p>
+      </div>
+    </div>
+
+    <!-- Connecting Circle -->
+    <div class="connecting-circle"></div>
+  </div>
+</div>
+
+<style>
+  .flow-diagram-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .flow-items {
+    display: grid;
+    grid-template-areas:
+      'extract .'
+      'export automate';
+    gap: 2rem;
+    position: relative;
+  }
+
+  .flow-item {
+    position: relative;
+    z-index: 2;
+  }
+
+  .flow-box {
+    background-color: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .flow-box:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .connecting-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border: 30px solid #4b7b7d;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.2;
+  }
+
+  /* Dark mode styles */
+  :global(.dark) .flow-box {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+
+  :global(.dark) .connecting-circle {
+    border-color: #4b7b7d;
+    opacity: 0.3;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .flow-items {
+      grid-template-areas:
+        'extract'
+        'export'
+        'automate';
+      gap: 1.5rem;
+    }
+
+    .connecting-circle {
+      width: 200px;
+      height: 200px;
+    }
+  }
+</style>
