@@ -62,7 +62,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
     // Box dimensions proportional to effective radius
     const boxWidth = Math.min(effectiveRadius * 1.2, 160); // 120% of radius, max 160px
     const boxHeight = Math.min(effectiveRadius * 0.8, 100); // 80% of radius, max 100px
-    const boxPadding = 12;
+    const boxPadding = 20;
 
     // Calculate angle step
     const angleStep = (2 * Math.PI) / items.length;
@@ -146,7 +146,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
           `translate(${calloutX + ux * nudge - boxWidth / 2}, ${calloutY + uy * nudge - boxHeight / 2})`
         );
 
-      // Add box background
+      // Add box background with rounded corners and shadow
       group
         .append('rect')
         .attr('width', boxWidth)
@@ -154,40 +154,68 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('fill', bgColor)
         .attr('stroke', mutedColor)
         .attr('stroke-width', 1)
-        .attr('rx', 6)
+        .attr('rx', 8)
         .attr('filter', 'url(#dropShadow)');
 
-      // Create text wrapper
-      const textWrapper = group.append('g').attr('transform', `translate(${boxPadding}, ${boxPadding})`);
+      // Create text wrapper with flex-like centering
+      const textWrapper = group
+        .append('g')
+        .attr('class', 'text-wrapper')
+        .attr('transform', `translate(${boxPadding}, 0)`);
 
-      // Add step number
+      // Calculate text dimensions for centering
+      const textWidth = boxWidth - boxPadding * 2;
+      const textAreaHeight = boxHeight - boxPadding * 2;
+
+      // Make text sizes proportional to available text area
+      const stepNumberHeight = Math.max(textAreaHeight * 0.12, 12);
+      const titleHeight = Math.max(textAreaHeight * 0.14, 14);
+      const taglineHeight = Math.max(textAreaHeight * 0.14, 14);
+      const totalTextHeight = stepNumberHeight + taglineHeight + titleHeight + 12;
+
+      // Center vertically within the padded area
+      const startY = boxPadding + (textAreaHeight - totalTextHeight) / 2;
+
+      // Add step number with consistent sizing
       textWrapper
         .append('text')
-        .attr('dy', '1em')
+        .attr('y', startY)
+        .attr('x', textWidth / 2)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'hanging')
         .attr('font-family', 'var(--aw-font-sans)')
-        .attr('font-size', '14px')
-        .attr('font-weight', '600')
-        .attr('fill', primaryColor)
-        .text(`Step ${index + 1}`);
-
-      // Add tagline
-      textWrapper
-        .append('text')
-        .attr('dy', '2.5em')
-        .attr('font-family', 'var(--aw-font-sans)')
-        .attr('font-size', '12px')
+        .attr('font-size', `${stepNumberHeight}px`)
         .attr('font-weight', '500')
         .attr('fill', primaryColor)
-        .text(item.cardTagline);
+        .attr('class', 'step-number')
+        .text(`Step ${index + 1}`);
 
-      // Add title
+      // Add title (smaller and above tagline)
       textWrapper
         .append('text')
-        .attr('dy', '4em')
+        .attr('y', startY + stepNumberHeight + 4)
+        .attr('x', textWidth / 2)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'hanging')
+        .attr('font-family', 'var(--aw-font-sans)')
+        .attr('font-size', `${titleHeight}px`)
+        .attr('font-weight', '500')
+        .attr('fill', primaryColor)
+        .attr('class', 'title')
+        .text(item.cardTagline);
+
+      // Add tagline (larger and below title)
+      textWrapper
+        .append('text')
+        .attr('y', startY + stepNumberHeight + titleHeight + 8)
+        .attr('x', textWidth / 2)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'hanging')
         .attr('font-family', 'var(--aw-font-heading)')
-        .attr('font-size', '16px')
-        .attr('font-weight', '600')
+        .attr('font-size', `${taglineHeight}px`)
+        .attr('font-weight', '300')
         .attr('fill', textColor)
+        .attr('class', 'tagline')
         .text(item.cardTitle);
     });
 
@@ -195,36 +223,61 @@ const serializedProps = JSON.stringify({ radius, width, height });
     const itemGroups = svg.selectAll('.item-group');
 
     function activateItem(index) {
-      // Reset all items
-      itemGroups.attr('transform-origin', 'center').attr('transform', function () {
-        return this.getAttribute('transform').split(' scale')[0];
-      });
+      // Reset all items with smooth transition
+      itemGroups
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
+        .attr('transform', function () {
+          return this.getAttribute('transform').split(' scale')[0];
+        });
 
       svg
         .selectAll('.connector-dot')
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
         .attr('r', effectiveRadius * 0.03)
         .attr('opacity', 0.8);
-      svg.selectAll('.connector-line').attr('opacity', 0.7);
 
-      // Highlight selected item
+      svg
+        .selectAll('.connector-line')
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
+        .attr('opacity', 0.7)
+        .attr('stroke-width', effectiveRadius * 0.01);
+
+      // Highlight selected item with enhanced animation
       const group = d3.select(`.item-${index}`);
       group
         .transition()
-        .duration(200)
+        .duration(600)
+        .ease(d3.easeCubicOut)
         .attr('transform', function () {
           const current = this.getAttribute('transform').split(' scale')[0];
           return current + ' scale(1.05)';
         });
 
+      // Enhance dot animation
       svg
         .selectAll(`.connector-${index}`)
         .filter('.connector-dot')
         .transition()
-        .duration(200)
+        .duration(600)
+        .ease(d3.easeCubicOut)
         .attr('r', effectiveRadius * 0.04)
         .attr('opacity', 1);
 
-      svg.selectAll(`.connector-${index}`).filter('.connector-line').transition().duration(200).attr('opacity', 1);
+      // Enhance line animation
+      svg
+        .selectAll(`.connector-${index}`)
+        .filter('.connector-line')
+        .transition()
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('opacity', 1)
+        .attr('stroke-width', effectiveRadius * 0.015);
 
       // Dispatch highlight event
       document.dispatchEvent(
