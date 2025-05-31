@@ -5,6 +5,8 @@
 export interface FlowItem {
   title: string;
   description: string;
+  cardTitle: string;
+  cardTagline: string;
 }
 
 interface Props {
@@ -12,6 +14,7 @@ interface Props {
   startAngle?: number; // in degrees, 0 = to the right, 90 = up, etc.
   radius?: number; // the radius of the central ring (in px)
   width?: number; // total width/height of the SVG (in px)
+  onHighlight?: (index: number) => void;
 }
 
 const {
@@ -19,19 +22,25 @@ const {
     {
       title: 'Extract',
       description: 'Meaningful information from unstructured data',
+      cardTitle: 'Smart Extraction',
+      cardTagline: 'AI-Powered',
     },
     {
       title: 'Automate',
       description: 'Automate your business process, applying rules and validations',
+      cardTitle: 'Process Automation',
+      cardTagline: 'Rules & Validation',
     },
     {
       title: 'Export',
       description: 'Present the right data into your ERP, CRM or IT Tool',
+      cardTitle: 'Seamless Integration',
+      cardTagline: 'Connect & Share',
     },
   ],
-  startAngle = -90, // start at "12 o'clock"
-  radius = 150, // px
-  width = 400, // px (so SVG is 400×400)
+  startAngle = -90,
+  radius = 150,
+  width = 400,
 } = Astro.props;
 
 const height = width;
@@ -41,7 +50,7 @@ const serializedItems = JSON.stringify(items);
 <!-- Import D3.js from CDN -->
 <script is:inline src="https://d3js.org/d3.v7.min.js"></script>
 
-<div class="flow-diagram-container" style={`width: ${width}px; height: ${height}px;`}>
+<div class="flow-diagram-container">
   <div id="flow-diagram-root"></div>
 </div>
 
@@ -49,6 +58,12 @@ const serializedItems = JSON.stringify(items);
   // Ensure we only run this once the DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     const items = JSON.parse(serializedItems);
+
+    // Create a custom event for highlighting
+    const highlightEvent = new CustomEvent('flowHighlight', {
+      detail: { index: 0 },
+      bubbles: true,
+    });
 
     // Center of our SVG
     const cx = width / 2;
@@ -58,13 +73,13 @@ const serializedItems = JSON.stringify(items);
     const angleStep = (2 * Math.PI) / items.length;
     const startRad = (startAngle * Math.PI) / 180;
 
-    // Create SVG element
+    // Create SVG element with responsive viewBox
     const svg = d3
       .select('#flow-diagram-root')
       .append('svg')
-      .attr('width', width)
-      .attr('height', height)
       .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('width', '100%')
+      .attr('height', '100%')
       .style('background', 'transparent');
 
     // Add definitions for filters
@@ -84,32 +99,33 @@ const serializedItems = JSON.stringify(items);
       .append('circle')
       .attr('cx', cx)
       .attr('cy', cy)
-      .attr('r', radius)
+      .attr('r', radius * 0.8) // Reduced radius for better proportions
       .attr('fill', 'none')
       .attr('stroke', '#4CB5AD')
-      .attr('stroke-width', 20)
+      .attr('stroke-width', 15)
       .attr('opacity', 0.3);
 
     // Create and position the items
     items.forEach((item, index) => {
       const angle = startRad + index * angleStep;
-      const nodeX = cx + radius * Math.cos(angle);
-      const nodeY = cy + radius * Math.sin(angle);
+      const adjustedRadius = radius * 0.8;
+      const nodeX = cx + adjustedRadius * Math.cos(angle);
+      const nodeY = cy + adjustedRadius * Math.sin(angle);
 
       // Add connection dot
       svg
         .append('circle')
         .attr('cx', nodeX)
         .attr('cy', nodeY)
-        .attr('r', 6)
+        .attr('r', 5)
         .attr('fill', '#4CB5AD')
         .attr('opacity', 0.8)
-        .attr('class', 'connector-dot');
+        .attr('class', `connector-dot connector-${index}`);
 
       // Calculate callout position
-      const calloutDistance = 40;
-      const calloutX = cx + (radius + calloutDistance) * Math.cos(angle);
-      const calloutY = cy + (radius + calloutDistance) * Math.sin(angle);
+      const calloutDistance = radius * 0.3;
+      const calloutX = cx + (adjustedRadius + calloutDistance) * Math.cos(angle);
+      const calloutY = cy + (adjustedRadius + calloutDistance) * Math.sin(angle);
 
       // Add connector line
       svg
@@ -121,21 +137,21 @@ const serializedItems = JSON.stringify(items);
         .attr('stroke', '#4CB5AD')
         .attr('stroke-width', 2)
         .attr('opacity', 0.7)
-        .attr('class', 'connector-line');
+        .attr('class', `connector-line connector-${index}`);
 
       // Create text box
-      const boxWidth = 160;
-      const boxHeight = 90;
-      const boxPadding = 15;
+      const boxWidth = Math.min(width * 0.3, 180);
+      const boxHeight = Math.min(height * 0.25, 120);
+      const boxPadding = 12;
 
-      // Calculate box position to avoid overlaps
+      // Calculate box position
       const ux = Math.cos(angle);
       const uy = Math.sin(angle);
       const nudge = Math.sqrt((boxWidth / 2) ** 2 + (boxHeight / 2) ** 2) * 0.7;
 
       const group = svg
         .append('g')
-        .attr('class', 'item-group')
+        .attr('class', `item-group item-${index}`)
         .attr(
           'transform',
           `translate(${calloutX + ux * nudge - boxWidth / 2}, ${calloutY + uy * nudge - boxHeight / 2})`
@@ -148,91 +164,108 @@ const serializedItems = JSON.stringify(items);
         .attr('height', boxHeight)
         .attr('fill', 'white')
         .attr('stroke', '#273233')
-        .attr('stroke-width', 1.5)
-        .attr('rx', 8)
+        .attr('stroke-width', 1)
+        .attr('rx', 6)
         .attr('filter', 'url(#dropShadow)');
 
-      // Add title
-      group
+      // Create text wrapper
+      const textWrapper = group.append('g').attr('transform', `translate(${boxPadding}, ${boxPadding})`);
+
+      // Add tagline
+      textWrapper
         .append('text')
-        .attr('x', boxPadding)
-        .attr('y', boxPadding + 12)
-        .text(item.title)
+        .attr('dy', '1em')
         .attr('font-family', 'Inter, system-ui, sans-serif')
-        .attr('font-size', '18px')
+        .attr('font-size', '12px')
+        .attr('font-weight', '500')
+        .attr('fill', '#4CB5AD')
+        .text(item.cardTagline);
+
+      // Add title
+      textWrapper
+        .append('text')
+        .attr('dy', '2.5em')
+        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-size', '16px')
         .attr('font-weight', '600')
-        .attr('fill', '#273233');
+        .attr('fill', '#273233')
+        .text(item.cardTitle);
 
       // Add description with word wrap
       const words = item.description.split(' ');
       let line = '';
-      let lineNumber = 0;
-      const lineHeight = 20;
-      const y = boxPadding + 40;
+      let lineNumber = 2;
+      const lineHeight = 18;
 
-      words.forEach((word) => {
+      const descText = textWrapper
+        .append('text')
+        .attr('dy', '4em')
+        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-size', '13px')
+        .attr('fill', '#4A4A4A');
+
+      words.forEach((word, i) => {
         const testLine = line + word + ' ';
-        if (testLine.length * 7 > boxWidth - boxPadding * 2) {
-          group
-            .append('text')
-            .attr('x', boxPadding)
-            .attr('y', y + lineNumber * lineHeight)
-            .text(line)
-            .attr('font-family', 'Inter, system-ui, sans-serif')
-            .attr('font-size', '14px')
-            .attr('fill', '#4A4A4A');
+        const testWidth = testLine.length * 6;
+
+        if (testWidth > boxWidth - boxPadding * 2) {
+          descText.append('tspan').attr('x', 0).attr('dy', lineHeight).text(line.trim());
+
           line = word + ' ';
           lineNumber++;
         } else {
           line = testLine;
         }
-      });
 
-      group
-        .append('text')
-        .attr('x', boxPadding)
-        .attr('y', y + lineNumber * lineHeight)
-        .text(line)
-        .attr('font-family', 'Inter, system-ui, sans-serif')
-        .attr('font-size', '14px')
-        .attr('fill', '#4A4A4A');
+        if (i === words.length - 1) {
+          descText
+            .append('tspan')
+            .attr('x', 0)
+            .attr('dy', line === word + ' ' ? lineHeight : 0)
+            .text(line.trim());
+        }
+      });
     });
 
     // Add hover effects
     const itemGroups = svg.selectAll('.item-group');
 
-    function activateItem(group, index) {
+    function activateItem(index) {
       // Reset all items
       itemGroups.attr('transform-origin', 'center').attr('transform', function () {
-        return this.getAttribute('transform');
+        return this.getAttribute('transform').split(' scale')[0];
       });
 
-      svg.selectAll('.connector-dot').attr('r', 6).attr('opacity', 0.8);
+      svg.selectAll('.connector-dot').attr('r', 5).attr('opacity', 0.8);
       svg.selectAll('.connector-line').attr('opacity', 0.7);
 
       // Highlight selected item
+      const group = d3.select(`.item-${index}`);
       group
         .transition()
         .duration(200)
         .attr('transform', function () {
-          const current = this.getAttribute('transform');
+          const current = this.getAttribute('transform').split(' scale')[0];
           return current + ' scale(1.05)';
         });
 
       svg
-        .selectAll('.connector-dot')
-        .filter((_, i) => i === index)
+        .selectAll(`.connector-${index}`)
+        .filter('.connector-dot')
         .transition()
         .duration(200)
-        .attr('r', 8)
+        .attr('r', 7)
         .attr('opacity', 1);
 
-      svg
-        .selectAll('.connector-line')
-        .filter((_, i) => i === index)
-        .transition()
-        .duration(200)
-        .attr('opacity', 1);
+      svg.selectAll(`.connector-${index}`).filter('.connector-line').transition().duration(200).attr('opacity', 1);
+
+      // Dispatch highlight event
+      document.dispatchEvent(
+        new CustomEvent('flowHighlight', {
+          detail: { index },
+          bubbles: true,
+        })
+      );
     }
 
     // Setup automatic rotation
@@ -240,8 +273,7 @@ const serializedItems = JSON.stringify(items);
       let currentIndex = 0;
 
       function highlight() {
-        const group = d3.select(itemGroups.nodes()[currentIndex]);
-        activateItem(group, currentIndex);
+        activateItem(currentIndex);
         currentIndex = (currentIndex + 1) % items.length;
       }
 
@@ -262,7 +294,9 @@ const serializedItems = JSON.stringify(items);
 <style>
   .flow-diagram-container {
     position: relative;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
   }
 
   #flow-diagram-root {

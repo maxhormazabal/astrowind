@@ -140,6 +140,8 @@ export interface Item {
   classes?: Record<string, string>;
   callToAction?: CallToAction;
   image?: Image;
+  cardTitle?: string;
+  cardTagline?: string;
 }
 
 export interface Price {

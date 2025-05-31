@@ -22,9 +22,11 @@ const {
 } = Astro.props;
 
 // Transform items for the FlowDiagram ensuring they match the FlowItem interface
-const flowItems: FlowItem[] = items.map(({ title: itemTitle, description }) => ({
+const flowItems: FlowItem[] = items.map(({ title: itemTitle, description, cardTitle, cardTagline }) => ({
   title: itemTitle || '',
   description: description || '',
+  cardTitle: cardTitle || itemTitle || '',
+  cardTagline: cardTagline || '',
 }));
 ---
 
@@ -52,8 +54,8 @@ const flowItems: FlowItem[] = items.map(({ title: itemTitle, description }) => (
         {
           items && items.length > 0 && (
             <div class="space-y-8">
-              {items.map(({ title: itemTitle, description }) => (
-                <div>
+              {items.map(({ title: itemTitle, description }, index) => (
+                <div class={`flow-text-item flow-text-${index} transition-all duration-200`}>
                   <div class="flex">
                     <div class="flex-grow">
                       <h3 class="text-xl font-bold">{itemTitle}</h3>
@@ -66,9 +68,46 @@ const flowItems: FlowItem[] = items.map(({ title: itemTitle, description }) => (
           )
         }
       </div>
-      <div class="md:basis-1/2 flex justify-center items-center min-h-[500px] mt-8 md:mt-0">
-        <FlowDiagram items={flowItems} width={500} radius={180} startAngle={-90} />
+      <div class="md:basis-1/2 flex justify-center items-center mt-8 md:mt-0">
+        <div class="w-full max-w-[500px] aspect-square">
+          <FlowDiagram items={flowItems} width={500} radius={180} startAngle={-90} />
+        </div>
       </div>
     </div>
   </div>
 </WidgetWrapper>
+
+<style>
+  .flow-text-item {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  .flow-text-item.active {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  /* Ensure the diagram maintains aspect ratio on smaller screens */
+  @media (max-width: 768px) {
+    .aspect-square {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<script>
+  // Handle flow diagram highlighting
+  document.addEventListener('flowHighlight', (event) => {
+    const { index } = (event as CustomEvent).detail;
+
+    // Remove active class from all items
+    document.querySelectorAll('.flow-text-item').forEach((item) => {
+      item.classList.remove('active');
+    });
+
+    // Add active class to current item
+    document.querySelector(`.flow-text-${index}`)?.classList.add('active');
+  });
+</script>
