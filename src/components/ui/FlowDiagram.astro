@@ -1,28 +1,69 @@
+---
+interface FlowItem {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  items?: FlowItem[];
+  startAngle?: number; // Ángulo inicial en grados (0 = derecha, 90 = arriba)
+  radius?: number; // Radio del círculo en porcentaje
+}
+
+const {
+  items = [
+    {
+      title: 'Extract',
+      description: 'Meaningful information from unstructured data',
+    },
+    {
+      title: 'Export',
+      description: 'Present the right data into your ERP, CRM or ITool',
+    },
+    {
+      title: 'Automate',
+      description: 'Automate your business process, applying rules and validations',
+    },
+  ],
+  startAngle = -90, // Empezamos desde arriba
+  radius = 42, // Porcentaje del contenedor
+} = Astro.props;
+
+// Calculamos el ángulo para cada elemento
+const angleStep = 360 / items.length;
+---
+
 <div class="flow-diagram-container">
   <div class="flow-items">
-    <!-- Extract Box -->
-    <div class="flow-item">
-      <div class="flow-box">
-        <h3 class="text-2xl font-bold mb-2">Extract</h3>
-        <p class="text-gray-600 dark:text-gray-300">Meaningful information from unstructured data</p>
-      </div>
-    </div>
+    {
+      items.map((item, index) => {
+        const angle = startAngle + angleStep * index;
+        const radians = (angle * Math.PI) / 180;
 
-    <!-- Export Box -->
-    <div class="flow-item">
-      <div class="flow-box">
-        <h3 class="text-2xl font-bold mb-2">Export</h3>
-        <p class="text-gray-600 dark:text-gray-300">Present the right data into your ERP, CRM or ITool</p>
-      </div>
-    </div>
+        // Calculamos la posición usando trigonometría
+        const x = 50 + radius * Math.cos(radians);
+        const y = 50 + radius * Math.sin(radians);
 
-    <!-- Automate Box -->
-    <div class="flow-item">
-      <div class="flow-box">
-        <h3 class="text-2xl font-bold mb-2">Automate</h3>
-        <p class="text-gray-600 dark:text-gray-300">Automate your business process, applying rules and validations</p>
-      </div>
-    </div>
+        return (
+          <div class="flow-item highlight-item" style={`left: ${x}%; top: ${y}%; transform: translate(-50%, -50%);`}>
+            <div class="flow-box">
+              <h3 class="text-2xl font-bold mb-2">{item.title}</h3>
+              <p class="text-gray-600 dark:text-gray-300">{item.description}</p>
+            </div>
+            <div class="connector-dot" />
+            <div
+              class="connector-line"
+              style={`
+              width: ${Math.abs(radius * Math.cos(radians))}%;
+              height: 2px;
+              transform: rotate(${angle}deg);
+              transform-origin: ${radius * Math.cos(radians) < 0 ? 'right' : 'left'} center;
+            `}
+            />
+          </div>
+        );
+      })
+    }
 
     <!-- Connecting Circle -->
     <div class="connecting-circle"></div>
@@ -32,24 +73,22 @@
 <style>
   .flow-diagram-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
     position: relative;
   }
 
   .flow-items {
-    display: grid;
-    grid-template-areas:
-      'extract .'
-      'export automate';
-    gap: 2rem;
     position: relative;
+    padding-top: 100%; /* Mantiene relación de aspecto 1:1 */
   }
 
   .flow-item {
-    position: relative;
+    position: absolute;
+    width: 280px;
     z-index: 2;
+    transition: all 0.5s ease;
   }
 
   .flow-box {
@@ -58,6 +97,7 @@
     border-radius: 0.5rem;
     padding: 1.5rem;
     transition: all 0.3s ease;
+    position: relative;
   }
 
   .flow-box:hover {
@@ -80,30 +120,135 @@
     opacity: 0.2;
   }
 
+  .connector-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #4b7b7d;
+    border-radius: 50%;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .connector-line {
+    position: absolute;
+    background-color: #4b7b7d;
+    opacity: 0.2;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform-origin: left center;
+  }
+
+  /* Highlight animation styles */
+  .highlight-item {
+    transition: all 0.5s ease;
+  }
+
+  .highlight-item.active {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  .highlight-item.active .flow-box {
+    box-shadow: 0 0 20px rgba(75, 123, 125, 0.3);
+    border-color: #4b7b7d;
+  }
+
+  .highlight-item.active .connector-dot {
+    background-color: #4b7b7d;
+    box-shadow: 0 0 10px #4b7b7d;
+  }
+
+  .highlight-item.active .connector-line {
+    opacity: 0.4;
+  }
+
   /* Dark mode styles */
   :global(.dark) .flow-box {
     background-color: #1e293b;
     border-color: #334155;
   }
 
-  :global(.dark) .connecting-circle {
+  :global(.dark) .connecting-circle,
+  :global(.dark) .connector-line {
     border-color: #4b7b7d;
+    background-color: #4b7b7d;
     opacity: 0.3;
+  }
+
+  :global(.dark) .connector-dot {
+    background-color: #4b7b7d;
+    opacity: 0.8;
+  }
+
+  :global(.dark) .highlight-item.active .flow-box {
+    box-shadow: 0 0 20px rgba(75, 123, 125, 0.5);
   }
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .flow-items {
-      grid-template-areas:
-        'extract'
-        'export'
-        'automate';
-      gap: 1.5rem;
+      height: auto;
+      padding-top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem 0;
+    }
+
+    .flow-item {
+      position: relative;
+      width: 100%;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      bottom: auto !important;
+      transform: none !important;
     }
 
     .connecting-circle {
-      width: 200px;
-      height: 200px;
+      display: none;
+    }
+
+    .connector-dot,
+    .connector-line {
+      display: none;
+    }
+
+    .highlight-item.active {
+      transform: scale(1.02) !important;
     }
   }
 </style>
+
+<script>
+  function setupHighlightAnimation() {
+    const items = document.querySelectorAll('.highlight-item');
+    let currentIndex = 0;
+    const animationInterval = 3000; // 3 seconds
+
+    function highlightItem(index: number) {
+      // Remove active class from all items
+      items.forEach((item) => item.classList.remove('active'));
+
+      // Add active class to current item
+      items[index].classList.add('active');
+
+      // Update index for next iteration
+      currentIndex = (currentIndex + 1) % items.length;
+    }
+
+    // Initial highlight
+    highlightItem(currentIndex);
+
+    // Start the interval
+    setInterval(() => {
+      highlightItem(currentIndex);
+    }, animationInterval);
+  }
+
+  // Run the animation setup when the document is ready
+  document.addEventListener('DOMContentLoaded', setupHighlightAnimation);
+</script>
