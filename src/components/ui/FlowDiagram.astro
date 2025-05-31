@@ -17,34 +17,11 @@ interface Props {
   onHighlight?: (index: number) => void;
 }
 
-const {
-  items = [
-    {
-      title: 'Extract',
-      description: 'Meaningful information from unstructured data',
-      cardTitle: 'Smart Extraction',
-      cardTagline: 'AI-Powered',
-    },
-    {
-      title: 'Automate',
-      description: 'Automate your business process, applying rules and validations',
-      cardTitle: 'Process Automation',
-      cardTagline: 'Rules & Validation',
-    },
-    {
-      title: 'Export',
-      description: 'Present the right data into your ERP, CRM or IT Tool',
-      cardTitle: 'Seamless Integration',
-      cardTagline: 'Connect & Share',
-    },
-  ],
-  startAngle = -90,
-  radius = 150,
-  width = 400,
-} = Astro.props;
+const { items = [], startAngle = -90, radius = 150, width = 400 } = Astro.props;
 
 const height = width;
 const serializedItems = JSON.stringify(items);
+const serializedProps = JSON.stringify({ radius, width, height });
 ---
 
 <!-- Import D3.js from CDN -->
@@ -54,16 +31,14 @@ const serializedItems = JSON.stringify(items);
   <div id="flow-diagram-root"></div>
 </div>
 
-<script define:vars={{ serializedItems, startAngle, radius, width, height }}>
+<script define:vars={{ serializedItems, serializedProps, startAngle }}>
   // Ensure we only run this once the DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     const items = JSON.parse(serializedItems);
+    const { radius, width, height } = JSON.parse(serializedProps);
 
-    // Create a custom event for highlighting
-    const highlightEvent = new CustomEvent('flowHighlight', {
-      detail: { index: 0 },
-      bubbles: true,
-    });
+    // Don't proceed if no items
+    if (!items || items.length === 0) return;
 
     // Center of our SVG
     const cx = width / 2;
@@ -99,7 +74,7 @@ const serializedItems = JSON.stringify(items);
       .append('circle')
       .attr('cx', cx)
       .attr('cy', cy)
-      .attr('r', radius * 0.8) // Reduced radius for better proportions
+      .attr('r', radius)
       .attr('fill', 'none')
       .attr('stroke', '#4CB5AD')
       .attr('stroke-width', 15)
@@ -108,9 +83,8 @@ const serializedItems = JSON.stringify(items);
     // Create and position the items
     items.forEach((item, index) => {
       const angle = startRad + index * angleStep;
-      const adjustedRadius = radius * 0.8;
-      const nodeX = cx + adjustedRadius * Math.cos(angle);
-      const nodeY = cy + adjustedRadius * Math.sin(angle);
+      const nodeX = cx + radius * Math.cos(angle);
+      const nodeY = cy + radius * Math.sin(angle);
 
       // Add connection dot
       svg
@@ -124,8 +98,8 @@ const serializedItems = JSON.stringify(items);
 
       // Calculate callout position
       const calloutDistance = radius * 0.3;
-      const calloutX = cx + (adjustedRadius + calloutDistance) * Math.cos(angle);
-      const calloutY = cy + (adjustedRadius + calloutDistance) * Math.sin(angle);
+      const calloutX = cx + (radius + calloutDistance) * Math.cos(angle);
+      const calloutY = cy + (radius + calloutDistance) * Math.sin(angle);
 
       // Add connector line
       svg
@@ -171,10 +145,20 @@ const serializedItems = JSON.stringify(items);
       // Create text wrapper
       const textWrapper = group.append('g').attr('transform', `translate(${boxPadding}, ${boxPadding})`);
 
-      // Add tagline
+      // Add step number
       textWrapper
         .append('text')
         .attr('dy', '1em')
+        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-size', '14px')
+        .attr('font-weight', '600')
+        .attr('fill', '#4CB5AD')
+        .text(`Step ${index + 1}`);
+
+      // Add tagline
+      textWrapper
+        .append('text')
+        .attr('dy', '2.5em')
         .attr('font-family', 'Inter, system-ui, sans-serif')
         .attr('font-size', '12px')
         .attr('font-weight', '500')
@@ -184,47 +168,12 @@ const serializedItems = JSON.stringify(items);
       // Add title
       textWrapper
         .append('text')
-        .attr('dy', '2.5em')
+        .attr('dy', '4em')
         .attr('font-family', 'Inter, system-ui, sans-serif')
         .attr('font-size', '16px')
         .attr('font-weight', '600')
         .attr('fill', '#273233')
         .text(item.cardTitle);
-
-      // Add description with word wrap
-      const words = item.description.split(' ');
-      let line = '';
-      let lineNumber = 2;
-      const lineHeight = 18;
-
-      const descText = textWrapper
-        .append('text')
-        .attr('dy', '4em')
-        .attr('font-family', 'Inter, system-ui, sans-serif')
-        .attr('font-size', '13px')
-        .attr('fill', '#4A4A4A');
-
-      words.forEach((word, i) => {
-        const testLine = line + word + ' ';
-        const testWidth = testLine.length * 6;
-
-        if (testWidth > boxWidth - boxPadding * 2) {
-          descText.append('tspan').attr('x', 0).attr('dy', lineHeight).text(line.trim());
-
-          line = word + ' ';
-          lineNumber++;
-        } else {
-          line = testLine;
-        }
-
-        if (i === words.length - 1) {
-          descText
-            .append('tspan')
-            .attr('x', 0)
-            .attr('dy', line === word + ' ' ? lineHeight : 0)
-            .text(line.trim());
-        }
-      });
     });
 
     // Add hover effects
