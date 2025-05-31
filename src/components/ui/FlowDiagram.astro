@@ -164,6 +164,163 @@ const serializedProps = JSON.stringify({ radius, width, height });
       .attr('stroke-width', effectiveRadius * 0.1) // 10% of radius
       .attr('opacity', 0.3);
 
+    // Function to create sector path
+    function createSectorPath(startAngle, endAngle, innerRadius, outerRadius) {
+      const start = {
+        x: cx + Math.cos(startAngle) * outerRadius,
+        y: cy + Math.sin(startAngle) * outerRadius,
+      };
+      const end = {
+        x: cx + Math.cos(endAngle) * outerRadius,
+        y: cy + Math.sin(endAngle) * outerRadius,
+      };
+      const innerStart = {
+        x: cx + Math.cos(startAngle) * innerRadius,
+        y: cy + Math.sin(startAngle) * innerRadius,
+      };
+      const innerEnd = {
+        x: cx + Math.cos(endAngle) * innerRadius,
+        y: cy + Math.sin(endAngle) * innerRadius,
+      };
+
+      const largeArcFlag = endAngle - startAngle <= Math.PI ? 0 : 1;
+
+      return `
+        M ${start.x} ${start.y}
+        A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}
+        L ${innerEnd.x} ${innerEnd.y}
+        A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}
+        Z
+      `;
+    }
+
+    // Create sectors group
+    const sectorsGroup = svg.append('g').attr('class', 'sectors-group');
+
+    // Calculate sector angles
+    const sectorAngle = (2 * Math.PI) / items.length;
+    const innerRadius = effectiveRadius * 0.45;
+    const outerRadius = effectiveRadius * 0.55;
+
+    // Create single animated sector
+    const animatedSector = sectorsGroup
+      .append('path')
+      .attr('class', 'animated-sector')
+      .attr('fill', primaryColor)
+      .attr('opacity', 0.3)
+      .attr('stroke', 'none');
+
+    // Function to interpolate between angles
+    function interpolateAngles(startAngle1, endAngle1, startAngle2, endAngle2) {
+      // Ensure angles are in the same phase
+      while (startAngle2 < startAngle1) startAngle2 += 2 * Math.PI;
+      while (endAngle2 < endAngle1) endAngle2 += 2 * Math.PI;
+
+      // Choose shortest path
+      if (startAngle2 - startAngle1 > 2 * Math.PI) {
+        startAngle2 -= 2 * Math.PI;
+        endAngle2 -= 2 * Math.PI;
+      }
+
+      return function (t) {
+        const currentStartAngle = startAngle1 + (startAngle2 - startAngle1) * t;
+        const currentEndAngle = endAngle1 + (endAngle2 - endAngle1) * t;
+        return createSectorPath(currentStartAngle, currentEndAngle, innerRadius, outerRadius);
+      };
+    }
+
+    // Function to activate sector with smooth animation
+    function activateSector(index, previousIndex) {
+      const pivotAngle = (startAngle * Math.PI) / 110;
+      const currentStartAngle = pivotAngle + index * sectorAngle;
+      const currentEndAngle = currentStartAngle + sectorAngle;
+
+      const previousStartAngle = pivotAngle + previousIndex * sectorAngle;
+      const previousEndAngle = previousStartAngle + sectorAngle;
+
+      animatedSector
+        .transition()
+        .duration(800)
+        .ease(d3.easeCubicInOut)
+        .attrTween('d', function () {
+          return interpolateAngles(previousStartAngle, previousEndAngle, currentStartAngle, currentEndAngle);
+        });
+    }
+
+    let currentIndex = 0;
+
+    // Modify existing activateItem function to include smooth sector animation
+    function activateItem(index) {
+      // Reset all items with smooth transition
+      itemGroups
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
+        .attr('transform', function () {
+          return this.getAttribute('transform').split(' scale')[0];
+        });
+
+      svg
+        .selectAll('.connector-dot')
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
+        .attr('r', effectiveRadius * 0.03)
+        .attr('opacity', 0.8);
+
+      svg
+        .selectAll('.connector-line')
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicOut)
+        .attr('opacity', 0.7)
+        .attr('stroke-width', effectiveRadius * 0.01);
+
+      // Activate corresponding sector with smooth animation
+      const previousIndex = currentIndex;
+      currentIndex = index;
+      activateSector(index, previousIndex);
+
+      // Highlight selected item with enhanced animation
+      const group = d3.select(`.item-${index}`);
+      group
+        .transition()
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('transform', function () {
+          const current = this.getAttribute('transform').split(' scale')[0];
+          return current + ' scale(1.05)';
+        });
+
+      // Enhance dot animation
+      svg
+        .selectAll(`.connector-${index}`)
+        .filter('.connector-dot')
+        .transition()
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('r', effectiveRadius * 0.04)
+        .attr('opacity', 1);
+
+      // Enhance line animation
+      svg
+        .selectAll(`.connector-${index}`)
+        .filter('.connector-line')
+        .transition()
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('opacity', 1)
+        .attr('stroke-width', effectiveRadius * 0.015);
+
+      // Dispatch highlight event
+      document.dispatchEvent(
+        new CustomEvent('flowHighlight', {
+          detail: { index },
+          bubbles: true,
+        })
+      );
+    }
+
     // Create and position the items
     items.forEach((item, index) => {
       const angle = (startAngle * Math.PI) / 180 + (index * (2 * Math.PI)) / items.length;
@@ -298,72 +455,6 @@ const serializedProps = JSON.stringify({ radius, width, height });
 
     // Add hover effects
     const itemGroups = svg.selectAll('.item-group');
-
-    function activateItem(index) {
-      // Reset all items with smooth transition
-      itemGroups
-        .transition()
-        .duration(400)
-        .ease(d3.easeCubicOut)
-        .attr('transform', function () {
-          return this.getAttribute('transform').split(' scale')[0];
-        });
-
-      svg
-        .selectAll('.connector-dot')
-        .transition()
-        .duration(400)
-        .ease(d3.easeCubicOut)
-        .attr('r', effectiveRadius * 0.03)
-        .attr('opacity', 0.8);
-
-      svg
-        .selectAll('.connector-line')
-        .transition()
-        .duration(400)
-        .ease(d3.easeCubicOut)
-        .attr('opacity', 0.7)
-        .attr('stroke-width', effectiveRadius * 0.01);
-
-      // Highlight selected item with enhanced animation
-      const group = d3.select(`.item-${index}`);
-      group
-        .transition()
-        .duration(600)
-        .ease(d3.easeCubicOut)
-        .attr('transform', function () {
-          const current = this.getAttribute('transform').split(' scale')[0];
-          return current + ' scale(1.05)';
-        });
-
-      // Enhance dot animation
-      svg
-        .selectAll(`.connector-${index}`)
-        .filter('.connector-dot')
-        .transition()
-        .duration(600)
-        .ease(d3.easeCubicOut)
-        .attr('r', effectiveRadius * 0.04)
-        .attr('opacity', 1);
-
-      // Enhance line animation
-      svg
-        .selectAll(`.connector-${index}`)
-        .filter('.connector-line')
-        .transition()
-        .duration(600)
-        .ease(d3.easeCubicOut)
-        .attr('opacity', 1)
-        .attr('stroke-width', effectiveRadius * 0.015);
-
-      // Dispatch highlight event
-      document.dispatchEvent(
-        new CustomEvent('flowHighlight', {
-          detail: { index },
-          bubbles: true,
-        })
-      );
-    }
 
     // Setup automatic rotation
     function rotateHighlight() {
