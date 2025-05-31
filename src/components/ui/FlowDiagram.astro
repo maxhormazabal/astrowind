@@ -337,35 +337,27 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('opacity', 0.8)
         .attr('class', `connector-dot connector-${index}`);
 
-      // Calculate callout position
-      const calloutDistance = effectiveRadius * 0.4; // 40% of radius
-      const calloutX = cx + (effectiveRadius + calloutDistance) * Math.cos(angle);
-      const calloutY = cy + (effectiveRadius + calloutDistance) * Math.sin(angle);
+      // Calculate uniform distance for all boxes
+      const boxDistance = effectiveRadius * 1.6; // Distancia uniforme desde el centro
+      const boxX = cx + boxDistance * Math.cos(angle);
+      const boxY = cy + boxDistance * Math.sin(angle);
 
       // Add connector line
       svg
         .append('line')
         .attr('x1', nodeX)
         .attr('y1', nodeY)
-        .attr('x2', calloutX)
-        .attr('y2', calloutY)
+        .attr('x2', boxX)
+        .attr('y2', boxY)
         .attr('stroke', primaryColor)
-        .attr('stroke-width', effectiveRadius * 0.01) // 1% of radius
+        .attr('stroke-width', effectiveRadius * 0.01)
         .attr('opacity', 0.7)
         .attr('class', `connector-line connector-${index}`);
-
-      // Calculate box position
-      const ux = Math.cos(angle);
-      const uy = Math.sin(angle);
-      const nudge = effectiveRadius * 0.2; // 20% of radius
 
       const group = svg
         .append('g')
         .attr('class', `item-group item-${index}`)
-        .attr(
-          'transform',
-          `translate(${calloutX + ux * nudge - boxWidth / 2}, ${calloutY + uy * nudge - boxHeight / 2})`
-        );
+        .attr('transform', `translate(${boxX - boxWidth / 2}, ${boxY - boxHeight / 2})`);
 
       // Add box background with rounded corners and shadow
       group

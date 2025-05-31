@@ -53,13 +53,18 @@ const flowItems: FlowItem[] = items.map(({ title: itemTitle, description, cardTi
 
         {
           items && items.length > 0 && (
-            <div class="space-y-8">
+            <div class="space-y-8 relative">
+              {/* Contenedor destacado que se moverá */}
+              <div class="spotlight-container absolute left-0 right-0" />
+
               {items.map(({ title: itemTitle, description }, index) => (
-                <div class={`flow-text-item flow-text-${index} transition-all duration-200`}>
-                  <div class="flex">
+                <div class={`flow-text-item flow-text-${index} relative p-6 rounded-lg`}>
+                  <div class="flex relative z-10">
                     <div class="flex-grow">
-                      <h3 class="text-xl font-bold">{itemTitle}</h3>
-                      {description && <p class="mt-2 text-muted dark:text-slate-400">{description}</p>}
+                      <h3 class="text-xl font-bold transition-all duration-500">{itemTitle}</h3>
+                      {description && (
+                        <p class="mt-2 text-muted dark:text-slate-400 transition-all duration-500">{description}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -80,12 +85,35 @@ const flowItems: FlowItem[] = items.map(({ title: itemTitle, description, cardTi
 <style>
   .flow-text-item {
     opacity: 0.7;
-    transform: scale(1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: left center;
   }
 
   .flow-text-item.active {
     opacity: 1;
-    transform: scale(1.02);
+  }
+
+  .spotlight-container {
+    background: var(--aw-color-bg-page);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    border-radius: 0.5rem;
+    pointer-events: none;
+    transition-property: transform, height, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+  }
+
+  .spotlight-container.visible {
+    opacity: 1;
+  }
+
+  :global(.dark) .spotlight-container {
+    background: var(--aw-color-bg-page-dark);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.2),
+      0 2px 4px -2px rgb(0 0 0 / 0.2);
   }
 
   /* Ensure the diagram maintains aspect ratio on smaller screens */
@@ -98,16 +126,66 @@ const flowItems: FlowItem[] = items.map(({ title: itemTitle, description, cardTi
 </style>
 
 <script>
+  function calculateTransitionDuration(distance: number): number {
+    // Base duration for short distances
+    const baseDuration = 400;
+    // Additional duration based on distance (max 200ms additional)
+    const additionalDuration = Math.min(Math.abs(distance) * 0.5, 200);
+    return baseDuration + additionalDuration;
+  }
+
   // Handle flow diagram highlighting
   document.addEventListener('flowHighlight', (event) => {
     const { index } = (event as CustomEvent).detail;
+    const items = document.querySelectorAll('.flow-text-item');
+    const spotlight = document.querySelector('.spotlight-container') as HTMLElement;
 
     // Remove active class from all items
-    document.querySelectorAll('.flow-text-item').forEach((item) => {
+    items.forEach((item) => {
       item.classList.remove('active');
     });
 
     // Add active class to current item
-    document.querySelector(`.flow-text-${index}`)?.classList.add('active');
+    const activeItem = document.querySelector(`.flow-text-${index}`) as HTMLElement;
+    if (activeItem && spotlight) {
+      activeItem.classList.add('active');
+
+      const itemRect = activeItem.getBoundingClientRect();
+      const parentRect = activeItem.parentElement?.getBoundingClientRect();
+
+      if (parentRect) {
+        const currentTop = spotlight.style.transform
+          ? parseInt(spotlight.style.transform.match(/translateY\(([-\d.]+)px\)/)?.[1] || '0')
+          : 0;
+
+        const relativeTop = itemRect.top - parentRect.top;
+        const distance = relativeTop - currentTop;
+
+        // Calculate dynamic duration based on distance
+        const duration = calculateTransitionDuration(distance);
+
+        // Ensure spotlight is visible
+        spotlight.classList.add('visible');
+
+        // Apply dynamic transition duration
+        spotlight.style.transitionDuration = `${duration}ms`;
+        spotlight.style.transform = `translateY(${relativeTop}px)`;
+        spotlight.style.height = `${itemRect.height}px`;
+      }
+    }
   });
+
+  // Initial setup
+  const spotlight = document.querySelector('.spotlight-container') as HTMLElement;
+  const firstItem = document.querySelector('.flow-text-item') as HTMLElement;
+  if (spotlight && firstItem) {
+    const rect = firstItem.getBoundingClientRect();
+    spotlight.style.height = `${rect.height}px`;
+    spotlight.style.transform = 'translateY(0)';
+
+    // Short delay before showing spotlight initially
+    setTimeout(() => {
+      spotlight.classList.add('visible');
+    }, 100);
+  }
 </script>
