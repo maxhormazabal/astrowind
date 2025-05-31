@@ -40,6 +40,15 @@ const serializedProps = JSON.stringify({ radius, width, height });
     // Don't proceed if no items
     if (!items || items.length === 0) return;
 
+    // Get CSS variables for colors
+    const style = getComputedStyle(document.documentElement);
+    const primaryColor = style.getPropertyValue('--aw-color-primary').trim();
+    const secondaryColor = style.getPropertyValue('--aw-color-secondary').trim();
+    const textColor = style.getPropertyValue('--aw-color-text-default').trim();
+    const mutedColor = style.getPropertyValue('--aw-color-text-muted').trim();
+    const bgColor = style.getPropertyValue('--aw-color-bg-page').trim();
+    const bgDarkColor = style.getPropertyValue('--aw-color-bg-page-dark').trim();
+
     // Center of our SVG
     const cx = width / 2;
     const cy = height / 2;
@@ -76,7 +85,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
       .attr('cy', cy)
       .attr('r', radius)
       .attr('fill', 'none')
-      .attr('stroke', '#4CB5AD')
+      .attr('stroke', primaryColor)
       .attr('stroke-width', 15)
       .attr('opacity', 0.3);
 
@@ -92,7 +101,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('cx', nodeX)
         .attr('cy', nodeY)
         .attr('r', 5)
-        .attr('fill', '#4CB5AD')
+        .attr('fill', primaryColor)
         .attr('opacity', 0.8)
         .attr('class', `connector-dot connector-${index}`);
 
@@ -108,7 +117,7 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .attr('y1', nodeY)
         .attr('x2', calloutX)
         .attr('y2', calloutY)
-        .attr('stroke', '#4CB5AD')
+        .attr('stroke', primaryColor)
         .attr('stroke-width', 2)
         .attr('opacity', 0.7)
         .attr('class', `connector-line connector-${index}`);
@@ -136,8 +145,8 @@ const serializedProps = JSON.stringify({ radius, width, height });
         .append('rect')
         .attr('width', boxWidth)
         .attr('height', boxHeight)
-        .attr('fill', 'white')
-        .attr('stroke', '#273233')
+        .attr('fill', bgColor)
+        .attr('stroke', mutedColor)
         .attr('stroke-width', 1)
         .attr('rx', 6)
         .attr('filter', 'url(#dropShadow)');
@@ -149,30 +158,30 @@ const serializedProps = JSON.stringify({ radius, width, height });
       textWrapper
         .append('text')
         .attr('dy', '1em')
-        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-family', 'var(--aw-font-sans)')
         .attr('font-size', '14px')
         .attr('font-weight', '600')
-        .attr('fill', '#4CB5AD')
+        .attr('fill', primaryColor)
         .text(`Step ${index + 1}`);
 
       // Add tagline
       textWrapper
         .append('text')
         .attr('dy', '2.5em')
-        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-family', 'var(--aw-font-sans)')
         .attr('font-size', '12px')
         .attr('font-weight', '500')
-        .attr('fill', '#4CB5AD')
+        .attr('fill', primaryColor)
         .text(item.cardTagline);
 
       // Add title
       textWrapper
         .append('text')
         .attr('dy', '4em')
-        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('font-family', 'var(--aw-font-heading)')
         .attr('font-size', '16px')
         .attr('font-weight', '600')
-        .attr('fill', '#273233')
+        .attr('fill', textColor)
         .text(item.cardTitle);
     });
 
@@ -254,10 +263,10 @@ const serializedProps = JSON.stringify({ radius, width, height });
   }
 
   :global(.dark) .flow-diagram-container svg rect {
-    fill: #1e293b;
+    fill: var(--aw-color-bg-page-dark);
   }
 
   :global(.dark) .flow-diagram-container svg text {
-    fill: #e2e8f0;
+    fill: var(--aw-color-text-default);
   }
 </style>
