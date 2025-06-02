@@ -57,7 +57,7 @@ const metadata = {
 
   <!-- Note Widget ******************* -->
 
-  <!-- <Note title="Filosofía:" description="Simplicidad, Mejores Prácticas y Alto Rendimiento" /> -->
+  <!-- <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" /> -->
 
   <!-- Content Widget **************** -->
 
@@ -91,57 +91,10 @@ const metadata = {
     </Fragment>
   </Content2>
 
-  <!-- Features Widget *************** -->
-
-  <Features
-    id="features"
-    tagline="Características"
-    title="Lo que obtiene con Dokken"
-    subtitle="Una de las soluciones más profesionales y completas para el procesamiento de documentos en el mercado actual."
-    items={[
-      {
-        title: 'Integración con Sistemas Empresariales',
-        description:
-          'Integración perfecta con ERPs, CRMs y otros sistemas empresariales para un flujo continuo de datos y documentos.',
-        icon: 'tabler:brand-tailwind',
-      },
-      {
-        title: 'Componentes Listos para Usar',
-        description:
-          'Herramientas diseñadas para ser utilizadas en entornos empresariales, departamentos contables, administrativos y de gestión documental.',
-        icon: 'tabler:components',
-      },
-      {
-        title: 'Mejores Prácticas',
-        description:
-          'Creación de soluciones seguras, eficientes y fáciles de usar que proporcionan experiencias excepcionales y valor duradero.',
-        icon: 'tabler:list-check',
-      },
-      {
-        title: 'Excelente Velocidad de Procesamiento',
-        description:
-          'Una buena velocidad de procesamiento mejora la productividad, optimiza la experiencia de usuario y aumenta las tasas de adopción.',
-        icon: 'tabler:rocket',
-      },
-      {
-        title: 'Optimización para Flujos de Trabajo',
-        description:
-          'La optimización de flujos de trabajo mejora la visibilidad de sus procesos, impulsa la eficiencia y permite alcanzar a más clientes.',
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Abierto a nuevas ideas y contribuciones',
-        description:
-          'Adoptamos una cultura abierta a nuevas ideas y contribuciones que fomenta la innovación, la colaboración y una experiencia de usuario dinámica.',
-        icon: 'tabler:bulb',
-      },
-    ]}
-  />
-
   <!-- Interactive Content Widget *************** -->
 
   <Content
-    tagline="Características Avanzadas"
+    tagline="Advanced Features"
     title="Design pixel-perfect sites beyond ordinary"
     isInteractive={true}
     items={[
@@ -207,6 +160,64 @@ const metadata = {
   >
     <Fragment slot="content"> Create stunning websites with our intuitive and powerful design tools </Fragment>
   </Content>
+
+  <!-- Features Widget *************** -->
+
+  <Features
+    id="features"
+    tagline="Features"
+    title="What you get with Dokken"
+    subtitle="One of the most professional and comprehensive solutions for document processing in today's market."
+    items={[
+      {
+        title: 'Enterprise System Integration',
+        description:
+          'Seamless integration with ERPs, CRMs and other business systems for continuous flow of data and documents.',
+        icon: 'tabler:brand-tailwind',
+      },
+      {
+        title: 'Ready-to-Use Components',
+        description:
+          'Tools designed for use in business environments, accounting departments, administrative and document management.',
+        icon: 'tabler:components',
+      },
+      {
+        title: 'Best Practices',
+        description:
+          'Creating secure, efficient and user-friendly solutions that provide exceptional experiences and lasting value.',
+        icon: 'tabler:list-check',
+      },
+      {
+        title: 'Excellent Processing Speed',
+        description:
+          'Good processing speed improves productivity, optimizes user experience and increases adoption rates.',
+        icon: 'tabler:rocket',
+      },
+      {
+        title: 'Workflow Optimization',
+        description:
+          'Workflow optimization improves process visibility, drives efficiency and enables you to reach more customers.',
+        icon: 'tabler:arrows-right-left',
+      },
+      {
+        title: 'Open to New Ideas and Contributions',
+        description:
+          'We embrace a culture open to new ideas and contributions that fosters innovation, collaboration and a dynamic user experience.',
+        icon: 'tabler:bulb',
+      },
+    ]}
+  />
+
+  <!-- Stats Widget ****************** -->
+
+  <Stats
+    stats={[
+      { title: 'Documents Processed', amount: '2.3M' },
+      { title: 'Satisfied Clients', amount: '24.8K' },
+      { title: 'Hours Saved', amount: '10.3K' },
+      { title: 'Accuracy', amount: '99.4%' },
+    ]}
+  />
 
   <!-- Pricing Widget **************** -->
 
@@ -350,81 +361,6 @@ const metadata = {
     ]}
   />
 
-  <!-- Content Widget **************** -->
-
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
   <!-- Steps Widget ****************** -->
 
   <Steps
@@ -523,16 +459,6 @@ const metadata = {
     </Fragment>
   </Features2>
 
-  <!-- HighlightedPosts Widget ******* -->
-
-  <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro + Tailwind CSS.
-                        Astro is a very interesting technology. Thanks.
-                `}
-  />
-
   <!-- Brands Widget ****************** -->
 
   <Brands
@@ -586,54 +512,44 @@ const metadata = {
   <!-- FAQs Widget ******************* -->
 
   <FAQs
-    title="Preguntas Frecuentes"
-    subtitle="Explore las siguientes preguntas para obtener información sobre las potentes funcionalidades que Dokken ofrece y cómo puede mejorar su gestión documental."
+    title="Frequently Asked Questions"
+    subtitle="Explore the following questions to learn about the powerful features Dokken offers and how it can improve your document management."
     tagline="FAQs"
     classes={{ container: 'max-w-6xl' }}
     items={[
       {
-        title: '¿Por qué elegir Dokken?',
+        title: 'Why choose Dokken?',
         description:
-          'Dokken ofrece una solución completa para la gestión documental con inteligencia artificial, permitiéndole automatizar procesos, reducir errores y ahorrar tiempo valioso en su negocio.',
+          'Dokken offers a complete solution for document management with artificial intelligence, allowing you to automate processes, reduce errors and save valuable time in your business.',
       },
       {
-        title: '¿Qué necesito para empezar?',
+        title: 'What do I need to get started?',
         description:
-          'Solo necesita sus documentos y una idea clara de sus procesos de negocio. Nosotros nos encargamos de configurar el sistema según sus necesidades específicas.',
+          'You only need your documents and a clear idea of your business processes. We take care of configuring the system according to your specific needs.',
       },
       {
-        title: '¿Cómo se instala Dokken?',
+        title: 'How is Dokken installed?',
         description:
-          'Dokken es una solución basada en la nube, por lo que no requiere instalación. Simplemente acceda a través de su navegador web y comience a utilizarlo inmediatamente.',
+          'Dokken is a cloud-based solution, so it requires no installation. Simply access through your web browser and start using it immediately.',
       },
       {
-        title: '¿Qué tipo de documentos puede procesar?',
+        title: 'What types of documents can it process?',
         description:
-          'Dokken puede procesar prácticamente cualquier tipo de documento: facturas, albaranes, contratos, formularios, DNIs, pasaportes, informes, y mucho más.',
+          'Dokken can process virtually any type of document: invoices, delivery notes, contracts, forms, IDs, passports, reports, and much more.',
       },
       {
-        title: '¿Es seguro almacenar mis documentos en Dokken?',
+        title: 'Is it safe to store my documents in Dokken?',
         description:
-          'Absolutamente. Utilizamos cifrado de extremo a extremo y cumplimos con todas las normativas de protección de datos, incluyendo el RGPD europeo.',
+          'Absolutely. We use end-to-end encryption and comply with all data protection regulations, including European GDPR.',
       },
       {
-        title: '¿Puedo personalizar los flujos de trabajo según mis necesidades?',
+        title: 'Can I customize workflows according to my needs?',
         description:
-          'Sí, Dokken ofrece flujos de trabajo totalmente personalizables que se adaptan a sus procesos específicos de negocio, con reglas de validación configurables y automatización a medida.',
+          'Yes, Dokken offers fully customizable workflows that adapt to your specific business processes, with configurable validation rules and custom automation.',
       },
     ]}
   />
 
-  <!-- Stats Widget ****************** -->
-
-  <Stats
-    stats={[
-      { title: 'Documentos Procesados', amount: '2.3M' },
-      { title: 'Clientes Satisfechos', amount: '24.8K' },
-      { title: 'Horas Ahorradas', amount: '10.3K' },
-      { title: 'Precisión', amount: '99.4%' },
-    ]}
-  />
   <!-- Steps2 Widget ****************** -->
 
   <Steps2
@@ -654,7 +570,7 @@ const metadata = {
       },
       {
         title: 'Follow us',
-        description: '@dokken-aiß',
+        description: '@dokken-ai',
         icon: 'tabler:brand-linkedin',
         href: 'https://linkedin.com/company/dokken-ai',
       },
@@ -666,7 +582,7 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Comenzar ahora',
+        text: 'Get Started Now',
         href: 'https://github.com/onwidget/astrowind',
         target: '_blank',
         icon: 'tabler:download',
@@ -674,14 +590,14 @@ const metadata = {
     ]}
   >
     <Fragment slot="title">
-      Dokken&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Inteligencia Artificial</span>
+      Dokken&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Artificial Intelligence</span>
     </Fragment>
 
     <Fragment slot="subtitle">
-      Transforme su gestión documental hoy mismo y únase a las miles de empresas que ya confían en Dokken. <br
+      Transform your document management today and join thousands of companies already trusting Dokken. <br
         class="hidden md:inline"
       />
-      ¡No pierda más tiempo con procesos manuales!
+      Stop wasting time with manual processes!
     </Fragment>
   </CallToAction>
 </Layout>
