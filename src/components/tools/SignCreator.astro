@@ -1,0 +1,493 @@
+---
+import { Image } from 'astro:assets';
+import entireLogoImage from '~/assets/tools/logos/logo_completo.svg';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const defaultAddress = 'Estrada do Vilar, 56, Lavadores, 36214 Vigo, Pontevedra';
+const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/heads/main/logo_completo.svg';
+---
+
+<div class:list={['relative flex flex-col p-6 bg-slate-800 rounded-lg shadow-lg border border-slate-700', className]}>
+  <div class="flex items-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-10 h-10 text-blue-400"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M3 21l18 0"></path>
+      <path d="M3 10l18 0"></path>
+      <path d="M5 6l7 -3l7 3"></path>
+      <path d="M4 10l0 11"></path>
+      <path d="M20 10l0 11"></path>
+    </svg>
+    <h3 class="text-xl font-bold ml-4 text-white">Creador de Firmas</h3>
+  </div>
+
+  <p class="mt-4 text-slate-300">Crea una firma de correo profesional con el logo corporativo.</p>
+
+  <!-- Formulario -->
+  <div class="space-y-4 mt-6 mb-6">
+    <div>
+      <label for="fullName" class="block text-sm font-medium text-slate-300 mb-2">Nombre Completo *</label>
+      <input
+        type="text"
+        id="fullName"
+        placeholder="Ej: Juan Pérez García"
+        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="position" class="block text-sm font-medium text-slate-300 mb-2">Cargo *</label>
+      <input
+        type="text"
+        id="position"
+        placeholder="Ej: Director de Marketing"
+        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="linkedin" class="block text-sm font-medium text-slate-300 mb-2">LinkedIn (opcional)</label>
+      <input
+        type="url"
+        id="linkedin"
+        placeholder="Ej: https://linkedin.com/in/usuario"
+        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="address" class="block text-sm font-medium text-slate-300 mb-2">Dirección *</label>
+      <textarea
+        id="address"
+        rows="3"
+        placeholder="Ej: Calle Principal 123, Ciudad, País"
+        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none resize-none"
+        >{defaultAddress}</textarea
+      >
+    </div>
+  </div>
+
+  <!-- Selección de formato -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-slate-300 mb-2">Formato de Salida</label>
+    <div class="flex space-x-4">
+      <label class="flex items-center">
+        <input type="radio" name="outputFormat" value="html" checked class="mr-2 text-blue-500" />
+        <span class="text-slate-300">Código HTML</span>
+      </label>
+      <label class="flex items-center">
+        <input type="radio" name="outputFormat" value="png" class="mr-2 text-blue-500" />
+        <span class="text-slate-300">Imagen PNG</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Vista previa -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-slate-300 mb-2">Vista Previa</label>
+    <div class="bg-white rounded-lg p-4 border border-slate-600">
+      <div id="signature-preview" class="text-sm text-gray-800">
+        <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="flex-shrink: 0;">
+              <img src={logoUrl} alt="Logo" style="height: 60px; width: auto;" id="preview-logo" />
+            </div>
+            <div style="border-left: 2px solid #1A6D69; padding-left: 20px;">
+              <div style="font-weight: bold; font-size: 16px; color: #1E2828; margin-bottom: 4px;" id="preview-name">
+                [Nombre Completo]
+              </div>
+              <div style="color: #1A6D69; font-weight: 500; margin-bottom: 8px;" id="preview-position">[Cargo]</div>
+              <div style="color: #666; line-height: 1.4; margin-bottom: 8px;" id="preview-address">[Dirección]</div>
+              <div id="preview-linkedin" style="display: none;">
+                <a href="#" style="color: #0077B5; text-decoration: none;" id="preview-linkedin-link"> LinkedIn </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="space-y-3">
+    <button
+      id="generate-signature"
+      class="w-full flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 font-medium"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 mr-2"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 5l0 14"></path>
+        <path d="M5 12l14 0"></path>
+      </svg>
+      <span id="generate-button-text">Generar Código HTML</span>
+    </button>
+
+    <!-- Resultado copiable (solo para HTML) -->
+    <div class="mb-6" id="html-output">
+      <label class="block text-sm font-medium text-slate-300 mb-2">Código HTML de la Firma</label>
+      <div class="relative">
+        <textarea
+          id="signature-code"
+          rows="8"
+          readonly
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 font-mono text-xs resize-none"
+          placeholder="El código HTML de la firma aparecerá aquí..."></textarea>
+        <button
+          id="copy-button"
+          class="absolute top-2 right-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xs"
+        >
+          Copiar
+        </button>
+      </div>
+    </div>
+
+    <!-- Configuración PNG (solo para PNG) -->
+    <div class="mb-6 hidden" id="png-config">
+      <label for="pngWidth" class="block text-sm font-medium text-slate-300 mb-2">Ancho de la imagen (px)</label>
+      <select id="pngWidth" class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600">
+        <option value="400">400px</option>
+        <option value="600" selected>600px</option>
+        <option value="800">800px</option>
+        <option value="1000">1000px</option>
+      </select>
+    </div>
+
+    <button
+      id="download-png"
+      class="w-full hidden flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 font-medium"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 mr-2"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+        <path d="M7 11l5 5l5 -5"></path>
+        <path d="M12 4l0 12"></path>
+      </svg>
+      Descargar PNG
+    </button>
+  </div>
+
+  <!-- Mensaje de confirmación -->
+  <div id="copy-message" class="mt-4 p-3 bg-green-600 text-white rounded-lg hidden">
+    ✓ Firma copiada al portapapeles
+  </div>
+</div>
+
+<script>
+  import { downloadAsPng } from '~/utils/download-as-png';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const fullNameInput = document.getElementById('fullName') as HTMLInputElement;
+    const positionInput = document.getElementById('position') as HTMLInputElement;
+    const linkedinInput = document.getElementById('linkedin') as HTMLInputElement;
+    const addressInput = document.getElementById('address') as HTMLTextAreaElement;
+
+    const formatRadios = document.querySelectorAll('input[name="outputFormat"]') as NodeListOf<HTMLInputElement>;
+    const htmlOutput = document.getElementById('html-output');
+    const pngConfig = document.getElementById('png-config');
+    const pngWidthSelect = document.getElementById('pngWidth') as HTMLSelectElement;
+
+    const previewName = document.getElementById('preview-name');
+    const previewPosition = document.getElementById('preview-position');
+    const previewAddress = document.getElementById('preview-address');
+    const previewLinkedin = document.getElementById('preview-linkedin');
+    const previewLinkedinLink = document.getElementById('preview-linkedin-link') as HTMLAnchorElement;
+
+    const signatureCode = document.getElementById('signature-code') as HTMLTextAreaElement;
+    const generateButton = document.getElementById('generate-signature');
+    const downloadPngButton = document.getElementById('download-png');
+    const generateButtonText = document.getElementById('generate-button-text');
+    const copyButton = document.getElementById('copy-button');
+    const copyMessage = document.getElementById('copy-message');
+
+    // URL del logo externo
+    const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/heads/main/logo_completo.svg';
+
+    if (
+      !fullNameInput ||
+      !positionInput ||
+      !addressInput ||
+      !previewName ||
+      !previewPosition ||
+      !previewAddress ||
+      !signatureCode ||
+      !generateButton ||
+      !copyButton ||
+      !copyMessage ||
+      !downloadPngButton ||
+      !generateButtonText ||
+      !htmlOutput ||
+      !pngConfig
+    ) {
+      console.error('Required elements not found');
+      return;
+    }
+
+    // Función para cambiar entre modos HTML y PNG
+    const updateOutputMode = () => {
+      const selectedFormat = document.querySelector('input[name="outputFormat"]:checked') as HTMLInputElement;
+      const isHtml = selectedFormat?.value === 'html';
+
+      if (isHtml) {
+        htmlOutput.classList.remove('hidden');
+        pngConfig.classList.add('hidden');
+        downloadPngButton.classList.add('hidden');
+        generateButton.classList.remove('hidden');
+        generateButtonText.textContent = 'Generar Código HTML';
+      } else {
+        htmlOutput.classList.add('hidden');
+        pngConfig.classList.remove('hidden');
+        downloadPngButton.classList.remove('hidden');
+        generateButton.classList.add('hidden');
+        generateButtonText.textContent = 'Descargar PNG';
+      }
+    };
+
+    // Función para actualizar la vista previa
+    const updatePreview = () => {
+      const name = fullNameInput.value.trim() || '[Nombre Completo]';
+      const position = positionInput.value.trim() || '[Cargo]';
+      const address = addressInput.value.trim() || '[Dirección]';
+      const linkedin = linkedinInput.value.trim();
+
+      if (previewName) previewName.textContent = name;
+      if (previewPosition) previewPosition.textContent = position;
+      if (previewAddress) {
+        previewAddress.innerHTML = address.replace(/\n/g, '<br>');
+      }
+
+      if (linkedin && previewLinkedin && previewLinkedinLink) {
+        previewLinkedin.style.display = 'block';
+        previewLinkedinLink.href = linkedin;
+      } else if (previewLinkedin) {
+        previewLinkedin.style.display = 'none';
+      }
+    };
+
+    // Función para generar el código HTML
+    const generateSignatureCode = () => {
+      const name = fullNameInput.value.trim();
+      const position = positionInput.value.trim();
+      const address = addressInput.value.trim();
+      const linkedin = linkedinInput.value.trim();
+
+      if (!name || !position || !address) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+      }
+
+      const linkedinHtml = linkedin
+        ? `<div style="margin-top: 8px;">
+          <a href="${linkedin}" style="color: #0077B5; text-decoration: none;">LinkedIn</a>
+        </div>`
+        : '';
+
+      const signatureHtml = `<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+  <div style="display: flex; align-items: center; gap: 20px;">
+    <div style="flex-shrink: 0;">
+      <img src="${logoUrl}" alt="Logo" style="height: 60px; width: auto;" />
+    </div>
+    <div style="border-left: 2px solid #1A6D69; padding-left: 20px;">
+      <div style="font-weight: bold; font-size: 16px; color: #1E2828; margin-bottom: 4px;">
+        ${name}
+      </div>
+      <div style="color: #1A6D69; font-weight: 500; margin-bottom: 8px;">
+        ${position}
+      </div>
+      <div style="color: #666; line-height: 1.4; margin-bottom: 8px;">
+        ${address.replace(/\n/g, '<br>')}
+      </div>${linkedinHtml}
+    </div>
+  </div>
+</div>`;
+
+      signatureCode.value = signatureHtml;
+    };
+
+    // Función para descargar PNG
+    const downloadSignaturePng = async () => {
+      const name = fullNameInput.value.trim();
+      const position = positionInput.value.trim();
+      const address = addressInput.value.trim();
+      const linkedin = linkedinInput.value.trim();
+
+      if (!name || !position || !address) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+      }
+
+      try {
+        const width = parseInt(pngWidthSelect.value);
+        const height = Math.round(width * 0.3); // Proporción 3:1 aproximadamente
+
+        // Crear canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = 2; // Para mejor calidad
+
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+
+        if (!ctx) {
+          throw new Error('No se pudo crear el contexto del canvas');
+        }
+
+        ctx.scale(scale, scale);
+
+        // Fondo blanco
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+
+        // Cargar la imagen del logo
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+
+        // Función para dibujar todo después de cargar el logo
+        const drawSignature = () => {
+          // Calcular posiciones y tamaños
+          const logoHeight = 60;
+          const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+          const logoX = 20;
+          const logoY = (height - logoHeight) / 2;
+
+          // Dibujar logo
+          ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
+
+          // Línea vertical separadora
+          const lineX = logoX + logoWidth + 20;
+          ctx.strokeStyle = '#1A6D69';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(lineX, logoY);
+          ctx.lineTo(lineX, logoY + logoHeight);
+          ctx.stroke();
+
+          // Texto - configuración inicial
+          const textStartX = lineX + 20;
+          let currentY = logoY;
+
+          // Nombre (bold, más grande)
+          ctx.font = 'bold 16px Arial, sans-serif';
+          ctx.fillStyle = '#1E2828';
+          ctx.fillText(name, textStartX, currentY + 18);
+          currentY += 25;
+
+          // Cargo
+          ctx.font = '500 14px Arial, sans-serif';
+          ctx.fillStyle = '#1A6D69';
+          ctx.fillText(position, textStartX, currentY + 14);
+          currentY += 22;
+
+          // Dirección (puede tener múltiples líneas)
+          ctx.font = '14px Arial, sans-serif';
+          ctx.fillStyle = '#666666';
+          const addressLines = address.split('\n');
+          addressLines.forEach((line) => {
+            if (line.trim()) {
+              ctx.fillText(line.trim(), textStartX, currentY + 14);
+              currentY += 18;
+            }
+          });
+
+          // LinkedIn (si existe)
+          if (linkedin) {
+            currentY += 5;
+            ctx.font = '14px Arial, sans-serif';
+            ctx.fillStyle = '#0077B5';
+            ctx.fillText('LinkedIn', textStartX, currentY + 14);
+          }
+
+          // Convertir canvas a blob y descargar DESPUÉS de dibujar todo
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              throw new Error('No se pudo generar la imagen');
+            }
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `firma_${name.replace(/\s+/g, '_').toLowerCase()}_${width}px.png`;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }, 'image/png');
+        };
+
+        // Esperar a que cargue el logo antes de dibujar
+        logoImg.onload = drawSignature;
+        logoImg.onerror = () => {
+          throw new Error('No se pudo cargar el logo');
+        };
+
+        logoImg.src = logoUrl;
+      } catch (error) {
+        console.error('Error downloading PNG:', error);
+        alert('Error al generar la imagen. Por favor, intenta de nuevo.');
+      }
+    };
+
+    // Función para copiar al portapapeles
+    const copyToClipboard = async () => {
+      if (!signatureCode.value.trim()) {
+        alert('Primero genera una firma para copiar.');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(signatureCode.value);
+        copyMessage.classList.remove('hidden');
+        setTimeout(() => {
+          copyMessage.classList.add('hidden');
+        }, 3000);
+      } catch (err) {
+        console.error('Error copying to clipboard:', err);
+        // Fallback para navegadores que no soportan la API del portapapeles
+        signatureCode.select();
+        document.execCommand('copy');
+        copyMessage.classList.remove('hidden');
+        setTimeout(() => {
+          copyMessage.classList.add('hidden');
+        }, 3000);
+      }
+    };
+
+    // Event listeners
+    formatRadios.forEach((radio) => {
+      radio.addEventListener('change', updateOutputMode);
+    });
+
+    fullNameInput.addEventListener('input', updatePreview);
+    positionInput.addEventListener('input', updatePreview);
+    addressInput.addEventListener('input', updatePreview);
+    linkedinInput.addEventListener('input', updatePreview);
+
+    generateButton.addEventListener('click', generateSignatureCode);
+    downloadPngButton.addEventListener('click', downloadSignaturePng);
+    copyButton.addEventListener('click', copyToClipboard);
+
+    // Inicialización
+    updateOutputMode();
+    updatePreview();
+  });
+</script>
