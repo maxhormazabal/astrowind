@@ -95,72 +95,53 @@ const metadata = {
   <!-- Interactive Content Widget *************** -->
 
   <Content
-    tagline="Advanced Features"
-    title="Design pixel-perfect sites beyond ordinary"
+    tagline="How It Works"
+    title="Four Steps to Intelligent Document Processing"
     isInteractive={true}
     items={[
       {
-        title: 'Advanced typography',
+        title: 'Ingest from Any Source',
         description:
-          'Take full control over your text with precision typography tools. Adjust fonts, spacing, and styles to add more character to your design.',
-        callToAction: {
-          text: 'View Details',
-          href: '#',
-          icon: 'tabler:arrow-right',
-        },
+          'Capture documents from multiple origins to automatically extract meaningful information with our system.',
+        // callToAction: {
+        //   text: 'View Details',
+        //   href: '#',
+        //   icon: 'tabler:arrow-right',
+        // },
       },
       {
-        title: 'CSS grids and layouts',
+        title: 'Data Enrichment',
         description:
-          'Build complex layouts with ease using CSS Grids. Create multi-directional structures, manage spacing, and achieve perfect alignment without limitations.',
-        callToAction: {
-          text: 'View Details',
-          href: '#',
-          icon: 'tabler:arrow-right',
-        },
+          'Look up information in databases and reference systems, or define your own business rules to enhance extracted data.',
       },
       {
-        title: 'Adaptive design',
-        description:
-          'Create designs that adapt seamlessly to any device or screen size. Ensure optimal user experience from desktop to mobile with responsive frameworks.',
-        callToAction: {
-          text: 'View Details',
-          href: '#',
-          icon: 'tabler:arrow-right',
-        },
+        title: 'Human-in-the-Loop Validation',
+        description: 'Allow reviewers to verify the results and make the final decision.',
       },
       {
-        title: 'Designed for efficiency',
-        description:
-          'Optimize your workflow with tools designed for speed and efficiency. Automate repetitive tasks and focus on what matters: creating exceptional designs.',
-        callToAction: {
-          text: 'View Details',
-          href: '#',
-          icon: 'tabler:arrow-right',
-        },
+        title: 'Export Wherever You Need',
+        description: 'Deliver validated data to your ERP or CRM, or export to the most used applications.',
       },
     ]}
     images={[
       {
-        src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-        alt: 'Typography showcase',
+        src: '~/assets/images/steps/1.png',
+        alt: 'Ingest from Any Source',
       },
       {
-        src: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80',
-        alt: 'CSS Grids showcase',
+        src: '~/assets/images/steps/2.png',
+        alt: 'Data Enrichment',
       },
       {
-        src: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-        alt: 'Adaptive Design showcase',
+        src: '~/assets/images/steps/3.png',
+        alt: 'Human-in-the-Loop Validation',
       },
       {
-        src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-        alt: 'Efficiency showcase',
+        src: '~/assets/images/steps/4.png',
+        alt: 'Export Wherever You Need',
       },
     ]}
-  >
-    <Fragment slot="content"> Create stunning websites with our intuitive and powerful design tools </Fragment>
-  </Content>
+  />
 
   <!-- Features Widget *************** -->
 
@@ -212,11 +193,12 @@ const metadata = {
   <!-- Stats Widget ****************** -->
 
   <Stats
+    tagline="measurable results"
+    subtitle="You don't have to wait long to see the results. With Dokken, you can see the time reduction in a few days"
     stats={[
-      { title: 'Documents Processed', amount: '2.3M' },
-      { title: 'Satisfied Clients', amount: '24.8K' },
-      { title: 'Hours Saved', amount: '10.3K' },
-      { title: 'Accuracy', amount: '99.4%' },
+      { title: 'Average reduction in manual effort per task', amount: '88.3%' },
+      { title: 'Median improvement over a 6-month payback period', amount: '3.5x' },
+      { title: 'Faster configuration time compared to the industry standard', amount: '4x' },
     ]}
   />
 
@@ -362,104 +344,6 @@ const metadata = {
       },
     ]}
   />
-
-  <!-- Steps Widget ****************** -->
-
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS"
-    tagline="Components"
-    items={[
-      {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
-      },
-      {
-        title: 'Content',
-        description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
-      },
-      {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
 
   <!-- Brands Widget ****************** -->
 
