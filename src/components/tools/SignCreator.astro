@@ -8,7 +8,14 @@ interface Props {
 
 const { class: className } = Astro.props;
 const defaultAddress = 'Estrada do Vilar, 56, Lavadores, 36214 Vigo, Pontevedra';
+const defaultCompanyLinkedin = 'https://www.linkedin.com/company/dokken-ai';
+const defaultCompanyLinkedinText = 'dokken-ai';
+const defaultCompanyEmail = 'info@dokken.ai';
+const defaultCompanyWebsite = 'https://www.dokken.ai';
 const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/heads/main/logo_completo.svg';
+const linkedinLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg';
+const emailLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gmail.svg';
+const websiteLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googlechrome.svg';
 ---
 
 <div class:list={['relative flex flex-col p-6 bg-slate-800 rounded-lg shadow-lg border border-slate-700', className]}>
@@ -54,23 +61,129 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       />
     </div>
     <div>
-      <label for="linkedin" class="block text-sm font-medium text-slate-300 mb-2">LinkedIn (opcional)</label>
+      <label for="personalLinkedin" class="block text-sm font-medium text-slate-300 mb-2"
+        >LinkedIn Personal (opcional)</label
+      >
       <input
         type="url"
-        id="linkedin"
-        placeholder="Ej: https://linkedin.com/in/usuario"
+        id="personalLinkedin"
+        placeholder="Ej: https://linkedin.com/in/juan-perez"
         class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
       />
     </div>
     <div>
-      <label for="address" class="block text-sm font-medium text-slate-300 mb-2">Dirección *</label>
-      <textarea
-        id="address"
-        rows="3"
-        placeholder="Ej: Calle Principal 123, Ciudad, País"
-        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none resize-none"
-        >{defaultAddress}</textarea
+      <label for="personalLinkedinText" class="block text-sm font-medium text-slate-300 mb-2"
+        >Usuario de LinkedIn Personal (opcional)</label
       >
+      <input
+        type="text"
+        id="personalLinkedinText"
+        placeholder="Ej: juan-perez"
+        class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+      />
+    </div>
+
+    <!-- Botón para mostrar/ocultar campos con valores por defecto -->
+    <div class="mt-6 mb-4">
+      <button
+        type="button"
+        id="toggle-default-fields"
+        class="flex items-center justify-between w-full px-4 py-3 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 transition duration-300 border border-slate-600"
+      >
+        <span class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 mr-2"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1.042 .635 2.405 .345 2.572 -1.065z"
+            ></path>
+            <path d="M9 12l2 2l4 -4"></path>
+          </svg>
+          Configuración Avanzada (Datos de la Empresa)
+        </span>
+        <svg
+          id="toggle-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 transform transition-transform"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M6 9l6 6l6 -6"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Campos con valores por defecto (ocultos inicialmente) -->
+    <div id="default-fields-section" class="hidden space-y-4 mb-6 p-4 bg-slate-750 rounded-lg border border-slate-600">
+      <div class="mb-4">
+        <p class="text-sm text-slate-400 italic">
+          Estos campos tienen valores predeterminados de la empresa. Solo edítalos si necesitas personalizarlos.
+        </p>
+      </div>
+
+      <div>
+        <label for="companyLinkedin" class="block text-sm font-medium text-slate-300 mb-2">LinkedIn de la Empresa</label
+        >
+        <input
+          type="url"
+          id="companyLinkedin"
+          placeholder="Ej: https://www.linkedin.com/company/dokken-ai"
+          value={defaultCompanyLinkedin}
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div>
+        <label for="companyLinkedinText" class="block text-sm font-medium text-slate-300 mb-2"
+          >Texto para LinkedIn de la Empresa</label
+        >
+        <input
+          type="text"
+          id="companyLinkedinText"
+          placeholder="Ej: dokken-ai"
+          value={defaultCompanyLinkedinText}
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div>
+        <label for="companyEmail" class="block text-sm font-medium text-slate-300 mb-2">Email de la Empresa</label>
+        <input
+          type="email"
+          id="companyEmail"
+          placeholder="Ej: info@dokken.ai"
+          value={defaultCompanyEmail}
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div>
+        <label for="companyWebsite" class="block text-sm font-medium text-slate-300 mb-2">Sitio Web de la Empresa</label
+        >
+        <input
+          type="url"
+          id="companyWebsite"
+          placeholder="Ej: https://www.dokken.ai"
+          value={defaultCompanyWebsite}
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div>
+        <label for="address" class="block text-sm font-medium text-slate-300 mb-2">Dirección</label>
+        <textarea
+          id="address"
+          rows="3"
+          placeholder="Ej: Calle Principal 123, Ciudad, País"
+          class="w-full bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:border-blue-500 focus:outline-none resize-none"
+          >{defaultAddress}</textarea
+        >
+      </div>
     </div>
   </div>
 
@@ -105,8 +218,49 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
               </div>
               <div style="color: #1A6D69; font-weight: 500; margin-bottom: 8px;" id="preview-position">[Cargo]</div>
               <div style="color: #666; line-height: 1.4; margin-bottom: 8px;" id="preview-address">[Dirección]</div>
-              <div id="preview-linkedin" style="display: none;">
-                <a href="#" style="color: #0077B5; text-decoration: none;" id="preview-linkedin-link"> LinkedIn </a>
+              <div
+                id="preview-linkedin-container"
+                style="display: flex; align-items: center; gap: 5px; margin-top: 8px;"
+              >
+                <img
+                  src={linkedinLogoUrl}
+                  alt="LinkedIn"
+                  style="width: 16px; height: 16px; filter: invert(27%) sepia(87%) saturate(1624%) hue-rotate(189deg) brightness(94%) contrast(101%);"
+                />
+                <div id="preview-linkedin-links" style="color: #0077B5;">
+                  <a href="#" style="color: #0077B5; text-decoration: none;" id="preview-company-linkedin-link"
+                    >@[EmpresaLinkedIn]</a
+                  >
+                  <span id="preview-linkedin-separator" style="display: none; color: #0077B5;"> | </span>
+                  <a
+                    href="#"
+                    style="color: #0077B5; text-decoration: none; display: none;"
+                    id="preview-personal-linkedin-link">@[PersonalLinkedIn]</a
+                  >
+                </div>
+              </div>
+              <div id="preview-email-container" style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">
+                <img
+                  src={emailLogoUrl}
+                  alt="Email"
+                  style="width: 16px; height: 16px; filter: invert(46%) sepia(79%) saturate(2476%) hue-rotate(2deg) brightness(99%) contrast(99%);"
+                />
+                <a href="#" style="color: #0077B5; text-decoration: none;" id="preview-company-email-link"
+                  >[EmailEmpresa]</a
+                >
+              </div>
+              <div
+                id="preview-website-container"
+                style="display: flex; align-items: center; gap: 5px; margin-top: 4px;"
+              >
+                <img
+                  src={websiteLogoUrl}
+                  alt="Website"
+                  style="width: 16px; height: 16px; filter: invert(47%) sepia(69%) saturate(959%) hue-rotate(121deg) brightness(98%) contrast(86%);"
+                />
+                <a href="#" style="color: #0077B5; text-decoration: none;" id="preview-company-website-link"
+                  >[SitioWebEmpresa]</a
+                >
               </div>
             </div>
           </div>
@@ -199,7 +353,12 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
   document.addEventListener('DOMContentLoaded', () => {
     const fullNameInput = document.getElementById('fullName') as HTMLInputElement;
     const positionInput = document.getElementById('position') as HTMLInputElement;
-    const linkedinInput = document.getElementById('linkedin') as HTMLInputElement;
+    const companyLinkedinInput = document.getElementById('companyLinkedin') as HTMLInputElement;
+    const companyLinkedinTextInput = document.getElementById('companyLinkedinText') as HTMLInputElement;
+    const personalLinkedinInput = document.getElementById('personalLinkedin') as HTMLInputElement;
+    const personalLinkedinTextInput = document.getElementById('personalLinkedinText') as HTMLInputElement;
+    const companyEmailInput = document.getElementById('companyEmail') as HTMLInputElement;
+    const companyWebsiteInput = document.getElementById('companyWebsite') as HTMLInputElement;
     const addressInput = document.getElementById('address') as HTMLTextAreaElement;
 
     const formatRadios = document.querySelectorAll('input[name="outputFormat"]') as NodeListOf<HTMLInputElement>;
@@ -210,8 +369,11 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
     const previewName = document.getElementById('preview-name');
     const previewPosition = document.getElementById('preview-position');
     const previewAddress = document.getElementById('preview-address');
-    const previewLinkedin = document.getElementById('preview-linkedin');
-    const previewLinkedinLink = document.getElementById('preview-linkedin-link') as HTMLAnchorElement;
+    const previewCompanyLinkedinLink = document.getElementById('preview-company-linkedin-link') as HTMLAnchorElement;
+    const previewPersonalLinkedinLink = document.getElementById('preview-personal-linkedin-link') as HTMLAnchorElement;
+    const previewLinkedinSeparator = document.getElementById('preview-linkedin-separator');
+    const previewCompanyEmailLink = document.getElementById('preview-company-email-link') as HTMLAnchorElement;
+    const previewCompanyWebsiteLink = document.getElementById('preview-company-website-link') as HTMLAnchorElement;
 
     const signatureCode = document.getElementById('signature-code') as HTMLTextAreaElement;
     const generateButton = document.getElementById('generate-signature');
@@ -222,14 +384,28 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
 
     // URL del logo externo
     const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/heads/main/logo_completo.svg';
+    const linkedinLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg';
+    const emailLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gmail.svg';
+    const websiteLogoUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googlechrome.svg';
 
     if (
       !fullNameInput ||
       !positionInput ||
+      !companyLinkedinInput ||
+      !companyLinkedinTextInput ||
+      !personalLinkedinInput ||
+      !personalLinkedinTextInput ||
+      !companyEmailInput ||
+      !companyWebsiteInput ||
       !addressInput ||
       !previewName ||
       !previewPosition ||
       !previewAddress ||
+      !previewCompanyLinkedinLink ||
+      !previewPersonalLinkedinLink ||
+      !previewLinkedinSeparator ||
+      !previewCompanyEmailLink ||
+      !previewCompanyWebsiteLink ||
       !signatureCode ||
       !generateButton ||
       !copyButton ||
@@ -268,7 +444,12 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       const name = fullNameInput.value.trim() || '[Nombre Completo]';
       const position = positionInput.value.trim() || '[Cargo]';
       const address = addressInput.value.trim() || '[Dirección]';
-      const linkedin = linkedinInput.value.trim();
+      const companyLinkedin = companyLinkedinInput.value.trim();
+      const companyLinkedinText = companyLinkedinTextInput.value.trim();
+      const personalLinkedin = personalLinkedinInput.value.trim();
+      const personalLinkedinText = personalLinkedinTextInput.value.trim();
+      const companyEmail = companyEmailInput.value.trim();
+      const companyWebsite = companyWebsiteInput.value.trim();
 
       if (previewName) previewName.textContent = name;
       if (previewPosition) previewPosition.textContent = position;
@@ -276,11 +457,36 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
         previewAddress.innerHTML = address.replace(/\n/g, '<br>');
       }
 
-      if (linkedin && previewLinkedin && previewLinkedinLink) {
-        previewLinkedin.style.display = 'block';
-        previewLinkedinLink.href = linkedin;
-      } else if (previewLinkedin) {
-        previewLinkedin.style.display = 'none';
+      // Configurar LinkedIn de la empresa (siempre visible si hay datos)
+      if (companyLinkedin && companyLinkedinText && previewCompanyLinkedinLink) {
+        previewCompanyLinkedinLink.href = companyLinkedin;
+        previewCompanyLinkedinLink.textContent = `@${companyLinkedinText}`;
+        previewCompanyLinkedinLink.style.display = 'inline';
+      } else if (previewCompanyLinkedinLink) {
+        previewCompanyLinkedinLink.style.display = 'none';
+      }
+
+      // Configurar LinkedIn personal y separador
+      if (personalLinkedin && personalLinkedinText && previewPersonalLinkedinLink) {
+        previewPersonalLinkedinLink.href = personalLinkedin;
+        previewPersonalLinkedinLink.textContent = `@${personalLinkedinText}`;
+        previewPersonalLinkedinLink.style.display = 'inline';
+        if (previewLinkedinSeparator) previewLinkedinSeparator.style.display = 'inline';
+      } else {
+        if (previewPersonalLinkedinLink) previewPersonalLinkedinLink.style.display = 'none';
+        if (previewLinkedinSeparator) previewLinkedinSeparator.style.display = 'none';
+      }
+
+      // Configurar email de la empresa
+      if (companyEmail && previewCompanyEmailLink) {
+        previewCompanyEmailLink.href = `mailto:${companyEmail}`;
+        previewCompanyEmailLink.textContent = companyEmail;
+      }
+
+      // Configurar sitio web de la empresa
+      if (companyWebsite && previewCompanyWebsiteLink) {
+        previewCompanyWebsiteLink.href = companyWebsite;
+        previewCompanyWebsiteLink.textContent = companyWebsite.replace(/^https?:\/\//, '');
       }
     };
 
@@ -289,18 +495,48 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       const name = fullNameInput.value.trim();
       const position = positionInput.value.trim();
       const address = addressInput.value.trim();
-      const linkedin = linkedinInput.value.trim();
+      const companyLinkedin = companyLinkedinInput.value.trim();
+      const companyLinkedinText = companyLinkedinTextInput.value.trim();
+      const personalLinkedin = personalLinkedinInput.value.trim();
+      const personalLinkedinText = personalLinkedinTextInput.value.trim();
+      const companyEmail = companyEmailInput.value.trim();
+      const companyWebsite = companyWebsiteInput.value.trim();
 
-      if (!name || !position || !address) {
+      if (
+        !name ||
+        !position ||
+        !address ||
+        !companyLinkedin ||
+        !companyLinkedinText ||
+        !companyEmail ||
+        !companyWebsite
+      ) {
         alert('Por favor, completa todos los campos obligatorios.');
         return;
       }
 
-      const linkedinHtml = linkedin
-        ? `<div style="margin-top: 8px;">
-          <a href="${linkedin}" style="color: #0077B5; text-decoration: none;">LinkedIn</a>
-        </div>`
-        : '';
+      // Construir los enlaces de LinkedIn
+      let linkedinLinksHtml = `@${companyLinkedinText}`;
+      if (personalLinkedin && personalLinkedinText) {
+        linkedinLinksHtml += ` | @${personalLinkedinText}`;
+      }
+
+      const linkedinSectionHtml = `<div style="display: flex; align-items: center; gap: 5px; margin-top: 8px;">
+        <img src="${linkedinLogoUrl}" alt="LinkedIn" style="width: 16px; height: 16px; filter: invert(27%) sepia(87%) saturate(1624%) hue-rotate(189deg) brightness(94%) contrast(101%);" />
+        <div style="color: #0077B5;">
+          <a href="${companyLinkedin}" style="color: #0077B5; text-decoration: none;">@${companyLinkedinText}</a>${personalLinkedin && personalLinkedinText ? ` | <a href="${personalLinkedin}" style="color: #0077B5; text-decoration: none;">@${personalLinkedinText}</a>` : ''}
+        </div>
+      </div>`;
+
+      const emailSectionHtml = `<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">
+        <img src="${emailLogoUrl}" alt="Email" style="width: 16px; height: 16px; filter: invert(46%) sepia(79%) saturate(2476%) hue-rotate(2deg) brightness(99%) contrast(99%);" />
+        <a href="mailto:${companyEmail}" style="color: #0077B5; text-decoration: none;">${companyEmail}</a>
+      </div>`;
+
+      const websiteSectionHtml = `<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">
+        <img src="${websiteLogoUrl}" alt="Website" style="width: 16px; height: 16px; filter: invert(47%) sepia(69%) saturate(959%) hue-rotate(121deg) brightness(98%) contrast(86%);" />
+        <a href="${companyWebsite}" style="color: #0077B5; text-decoration: none;">${companyWebsite.replace(/^https?:\/\//, '')}</a>
+      </div>`;
 
       const signatureHtml = `<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
   <div style="display: flex; align-items: center; gap: 20px;">
@@ -316,7 +552,7 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       </div>
       <div style="color: #666; line-height: 1.4; margin-bottom: 8px;">
         ${address.replace(/\n/g, '<br>')}
-      </div>${linkedinHtml}
+      </div>${linkedinSectionHtml}${emailSectionHtml}${websiteSectionHtml}
     </div>
   </div>
 </div>`;
@@ -329,9 +565,12 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       const name = fullNameInput.value.trim();
       const position = positionInput.value.trim();
       const address = addressInput.value.trim();
-      const linkedin = linkedinInput.value.trim();
+      const companyLinkedin = companyLinkedinInput.value.trim();
+      const companyLinkedinText = companyLinkedinTextInput.value.trim();
+      const personalLinkedin = personalLinkedinInput.value.trim();
+      const personalLinkedinText = personalLinkedinTextInput.value.trim();
 
-      if (!name || !position || !address) {
+      if (!name || !position || !address || !companyLinkedin || !companyLinkedinText) {
         alert('Por favor, completa todos los campos obligatorios.');
         return;
       }
@@ -409,12 +648,19 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
             }
           });
 
-          // LinkedIn (si existe)
-          if (linkedin) {
+          // LinkedIn de la empresa
+          if (companyLinkedin && companyLinkedinText) {
             currentY += 5;
             ctx.font = '14px Arial, sans-serif';
             ctx.fillStyle = '#0077B5';
-            ctx.fillText('LinkedIn', textStartX, currentY + 14);
+
+            // Construir el texto de LinkedIn
+            let linkedinText = `@${companyLinkedinText}`;
+            if (personalLinkedin && personalLinkedinText) {
+              linkedinText += ` | @${personalLinkedinText}`;
+            }
+
+            ctx.fillText(linkedinText, textStartX, currentY + 14);
           }
 
           // Convertir canvas a blob y descargar DESPUÉS de dibujar todo
@@ -477,10 +723,36 @@ const logoUrl = 'https://raw.githubusercontent.com/maxhormazabal/nothing/refs/he
       radio.addEventListener('change', updateOutputMode);
     });
 
+    // Toggle para campos por defecto
+    const toggleButton = document.getElementById('toggle-default-fields');
+    const defaultFieldsSection = document.getElementById('default-fields-section');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    if (toggleButton && defaultFieldsSection && toggleIcon) {
+      toggleButton.addEventListener('click', () => {
+        const isHidden = defaultFieldsSection.classList.contains('hidden');
+
+        if (isHidden) {
+          defaultFieldsSection.classList.remove('hidden');
+          toggleIcon.style.transform = 'rotate(180deg)';
+          // Actualizar vista previa cuando se abre la sección
+          updatePreview();
+        } else {
+          defaultFieldsSection.classList.add('hidden');
+          toggleIcon.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+
     fullNameInput.addEventListener('input', updatePreview);
     positionInput.addEventListener('input', updatePreview);
+    personalLinkedinInput.addEventListener('input', updatePreview);
+    personalLinkedinTextInput.addEventListener('input', updatePreview);
+    companyLinkedinInput.addEventListener('input', updatePreview);
+    companyLinkedinTextInput.addEventListener('input', updatePreview);
+    companyEmailInput.addEventListener('input', updatePreview);
+    companyWebsiteInput.addEventListener('input', updatePreview);
     addressInput.addEventListener('input', updatePreview);
-    linkedinInput.addEventListener('input', updatePreview);
 
     generateButton.addEventListener('click', generateSignatureCode);
     downloadPngButton.addEventListener('click', downloadSignaturePng);
